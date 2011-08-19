@@ -227,6 +227,19 @@ footer { margin: 0 auto 20px; padding: 20px 30px 15px; width: 898px; }
 	#testimonials .comment { color: #555; float: left; font: italic 12px/18px georgia,serif; margin: 5px 40px 10px 0; width: 424px; }
 	#testimonials .author { font: bold 12px arial, sans-serif; text-align: right; margin: 10px 0; }
 
+#information { height: 940px; /* 814px */ margin: 0 0 10px; padding: 9px 0; }
+.list-main { float: left; width: 450px; margin: 0 20px 0 0; padding: 0 0 0 10px; }
+.list-sidebar { float: left; width: 225px; }
+.widget {}
+.widget img, .widget iframe { border: 1px solid #C7C6BE; }
+.widget a {color: #02517e; text-decoration: none; }
+.broadcast { float: right; color: #777; }
+.broadcast strong { display: block; color: #555 !important; line-height: 17px; }
+.broadcast strong.temperature { display: block; font-size: 17px; }
+.advertisment { margin: 0 0 15px; }
+.advertisment img { border: 1px solid #C7C6BE; float: left; margin: 0 8px 0 0; }
+.advertisment a { color: #02517E; display: block; float: left; margin: 2px 8px 0 0; text-decoration: none; }
+
 .region-wrapper { width: 220px; height: 802px; overflow: auto; margin: 0 10px 0 0; }
 ul { list-style: none; padding: 0 0 0 20px; }
 ul.region-list { margin: 0; }
