@@ -236,9 +236,13 @@ footer { margin: 0 auto 20px; padding: 20px 30px 15px; width: 898px; }
 .broadcast { float: right; color: #777; }
 .broadcast strong { display: block; color: #555 !important; line-height: 17px; }
 .broadcast strong.temperature { display: block; font-size: 17px; }
+#photo-stream { min-height: 157px; }
 .advertisment { margin: 0 0 15px; }
 .advertisment img { border: 1px solid #C7C6BE; float: left; margin: 0 8px 0 0; }
-.advertisment a { color: #02517E; display: block; float: left; margin: 2px 8px 0 0; text-decoration: none; }
+.advertisment a { color: #02517E; display: block; float: left; margin: 1px 8px 0 0; text-decoration: none; padding: 3px 0; }
+.advertisment p { margin: 0 0 4px; }
+.advertisment .price { color: #777; }
+.advertisment .book { background: #B3A5A8; border: 1px solid #B38E93; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; color: #EEEEEE; padding: 3px 6px; text-shadow: none; }
 
 .region-wrapper { width: 220px; height: 802px; overflow: auto; margin: 0 10px 0 0; }
 ul { list-style: none; padding: 0 0 0 20px; }

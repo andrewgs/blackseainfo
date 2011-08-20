@@ -15,7 +15,14 @@ $(function(){
 		next: '#slide-next',
 		width: 552,
 		fit: 1
-	}); 	
+	});
+	
+	$('div#photo-stream').cycle({
+		fx: 'fade',
+		speed: '2000',
+		easing: 'easeInOutExpo',
+		timeout: 7000
+	}); 		
 	
 	$('.scroll-pane').jScrollPane({
 		showArrows: true,
