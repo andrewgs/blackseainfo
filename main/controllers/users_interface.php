@@ -17,6 +17,7 @@ class Users_interface extends CI_Controller {
 		$this->load->model('reviews');
 		$this->load->model('news');
 		$this->load->model('materials');
+		$this->load->model('union');
 		$cookieuid = $this->session->userdata('login_id');
 		if(isset($cookieuid) and !empty($cookieuid)):
 			$this->user['uid'] = $this->session->userdata('userid');
@@ -49,7 +50,6 @@ class Users_interface extends CI_Controller {
 					'baseurl' 		=> base_url(),
 					'userinfo'		=> $this->user,
 					'regions'		=> $this->regions->read_records(),
-					'subtype'		=> $this->types->read_group(3),
 					'reviews'		=> $this->reviews->read_reviews(2),
 					'uri_string'	=> ''
 			);
@@ -69,7 +69,8 @@ class Users_interface extends CI_Controller {
 					'userinfo'		=> $this->user,
 					'catalog'		=> $this->catalog->read_catalog_zone($region),
 					'regions'		=> $this->regions->read_records(),
-					'subtype'		=> $this->types->read_groups(),
+//					'subtype'		=> $this->types->read_groups(),
+					'subtype'		=> $this->union->zone_subtype($region),
 					'news'			=> $this->news->read_news(2,$region),
 					'uri_string'	=> ''
 			);
@@ -156,7 +157,8 @@ class Users_interface extends CI_Controller {
 					'userinfo'		=> $this->user,
 					'catalog'		=> $this->catalog->read_subtype_zone($region,$type),
 					'regions'		=> $this->regions->read_records(),
-					'subtype'		=> $this->types->read_groups(),
+//					'subtype'		=> $this->types->read_groups(),
+					'subtype'		=> $this->union->zone_subtype($region),
 					'news'			=> $this->news->read_news(2,$region),
 					'uri_string'	=> ''
 			);
@@ -206,11 +208,10 @@ class Users_interface extends CI_Controller {
 	
 	function order(){
 		
-		$region = $this->uri->segment(2);
-		if(!$this->regions->region_exist($region)):
-			show_404();
-		endif;
+		$region = $this->regions->region_exist($this->uri->segment(2));
+		if(!$region) show_404();
 		$regname = $this->regions->read_city($region);
+		
 		$pagevar = array(
 					'description'	=> '',
 					'author'		=> '',
@@ -230,7 +231,8 @@ class Users_interface extends CI_Controller {
 	
 	function resorts_photo(){
 		
-		$region = $this->uri->segment(2);
+		$region = $this->regions->region_exist($this->uri->segment(2));
+		if(!$region) show_404();
 		$regname = $this->regions->read_city($region);
 		$pagevar = array(
 					'description'	=> '',
@@ -249,7 +251,8 @@ class Users_interface extends CI_Controller {
 	
 	function video(){
 		
-		$region = $this->uri->segment(2);
+		$region = $this->regions->region_exist($this->uri->segment(2));
+		if(!$region) show_404();
 		$regname = $this->regions->read_city($region);
 		$pagevar = array(
 					'description'	=> '',
@@ -268,7 +271,8 @@ class Users_interface extends CI_Controller {
 	
 	function camers(){
 		
-		$region = $this->uri->segment(2);
+		$region = $this->regions->region_exist($this->uri->segment(2));
+		if(!$region) show_404();
 		$regname = $this->regions->read_city($region);
 		$pagevar = array(
 					'description'	=> '',
@@ -370,7 +374,8 @@ class Users_interface extends CI_Controller {
 	
 	function zone_news(){
 		
-		$region = $this->uri->segment(2);
+		$region = $this->regions->region_exist($this->uri->segment(2));
+		if(!$region) show_404();
 		$regname = $this->regions->read_city($region);
 		$pagevar = array(
 					'description'	=> '',
@@ -390,7 +395,7 @@ class Users_interface extends CI_Controller {
 		
 		$pagevar['count'] = $this->news->count_records($region);
 		
-		$config['base_url'] 		= $pagevar['baseurl'].'zone/'.$region.'/news/';
+		$config['base_url'] 		= $pagevar['baseurl'].'resort/'.$this->uri->segment(2).'/news';
         $config['total_rows'] 		= $pagevar['count']; 
         $config['per_page'] 		= 5;
         $config['num_links'] 		= 4;
@@ -407,6 +412,23 @@ class Users_interface extends CI_Controller {
 		$pagevar['pages'] = $this->pagination->create_links();
 		
 		$this->load->view('users_interface/zone-news',$pagevar);
+	}
+
+	function read_news(){
+		
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Читать новость",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'news'			=> $this->news->read_news(2,0),
+					'content'		=> $this->news->read_record($this->uri->segment(2)),
+					'uri_string'	=> ''
+			);
+		$pagevar['content']['date'] = $this->operation_date($pagevar['content']['date']);
+		$this->load->view('users_interface/read-news',$pagevar);
 	}
 	
 	function insert_email(){

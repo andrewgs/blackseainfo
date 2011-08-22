@@ -19,6 +19,16 @@ class News extends CI_Model {
 		return $query->result_array();
 	}
 	
+	function read_record($id){
+	
+		$this->db->where('id',$id);
+		$this->db->order_by('date','DESC');
+		$query = $this->db->get('news',1);
+		$data = $query->result_array();
+		if(count($data)) return $data[0];
+		return NULL;
+	}
+	
 	function read_news($count,$region){
 		
 		$sql = "SELECT * FROM news WHERE region IN (0,$region) ORDER BY date DESC LIMIT $count"; 

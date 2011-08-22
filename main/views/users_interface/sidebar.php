@@ -31,7 +31,7 @@
 	<div id="news-stream" class="widget">
 	<?php for($i=0;$i<count($news);$i++):?>
 		<strong><?=$news[$i]['title'];?></strong>
-		<p><?=$news[$i]['text'];?><?=anchor('#','<nobr> Читать далее &raquo;</nobr>');?></p>
+		<p><?=$news[$i]['text'];?><?=anchor('read-news/'.$news[$i]['id'],'<nobr> Читать далее &raquo;</nobr>');?></p>
 	<?php endfor;?>
 	</div>
 <?php endif; ?>
