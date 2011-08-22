@@ -3,9 +3,9 @@
 		<div class="column first">
 			<h3>О компании</h3>
 			<ul>
-				<li><?=anchor('#','Отзывы клиентов');?></li>
-				<li><?=anchor('#','Бронирование онлайн');?></li>
-				<li><?=anchor('#','Способы оплаты');?></li>
+				<li><?=anchor('reviews','Отзывы клиентов');?></li>
+				<li><?=anchor('book','Бронирование онлайн');?></li>
+				<li><?=anchor('payment','Способы оплаты');?></li>
 			</ul>
 		</div>
 		<div class="column">
@@ -19,23 +19,23 @@
 		<div class="column">
 			<h3>Наши услуги</h3>
 			<ul>
-				<li><?=anchor('#','Фотографии курортов');?></li>
-				<li><?=anchor('#','Видео материалы');?></li>
-				<li><?=anchor('#','Веб-камеры на пляжах');?></li>
-				<li><?=anchor('#','Новости');?></li>
+				<li><?=anchor('resorts-photo','Фотографии курортов');?></li>
+				<li><?=anchor('video','Видео материалы');?></li>
+				<li><?=anchor('camers','Веб-камеры на пляжах');?></li>
+				<li><?=anchor('news','Новости');?></li>
 			</ul>
 		</div>
 		<div class="column">
 			<h3>Прочее</h3>
 			<ul>
-				<li><?=anchor('#','Погода на побережье');?></li>
-				<li><?=anchor('#','Карта города Сочи');?></li>
+				<li><?=anchor('weather','Погода на побережье');?></li>
+				<li><?=anchor('map-of-sochi','Карта города Сочи');?></li>
 			</ul>
 		</div>
 		<div class="column last">
 			<h3>Наши услуги</h3>
 			<ul>
-				<li><?=anchor('#','Контакты');?></li>
+				<li><?=anchor('contacts','Контакты');?></li>
 				<li><?=anchor('#','info@blackseainfo.ru');?></li>
 				<li><?=anchor('#','sales@blackseainfo.ru');?></li>
 				<li><?=anchor('#','blackseainfo (skype)');?></li>

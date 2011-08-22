@@ -4,8 +4,8 @@
 		<ul>
 			<li><?=anchor('','Главная');?></li>
 			<li><?=anchor('#','Участие в проекте');?></li>
-			<li><?=anchor('#','Новостная лента');?></li>
-			<li><?=anchor('#','Контакты');?></li>
+			<li><?=anchor('news','Новостная лента');?></li>
+			<li><?=anchor('contacts','Контакты');?></li>
 		</ul>
 	</nav>
 	<div class="top-phone">

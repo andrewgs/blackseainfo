@@ -80,6 +80,60 @@ class Users_interface extends CI_Controller {
 		$this->load->view('users_interface/content',$pagevar);
 	}
 	
+	function unit_information(){
+		
+		$region = $this->uri->segment(2);
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - ",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'unit'			=> $this->catalog->read_unit($this->uri->segment(4)),
+					'regions'		=> $this->regions->read_records(),
+					'fun'			=> $this->types->read_group(3),
+					'news'			=> $this->news->read_news(2,$region),
+			);
+		$pagevar['title'] .= $pagevar['unit']['ctl_name'].", ".$this->regions->read_city($region);
+		$this->load->view('users_interface/unit_information',$pagevar);
+	}
+	
+	function unit_book(){
+		
+		$region = $this->uri->segment(2);
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - ",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'unit'			=> $this->catalog->read_unit($this->uri->segment(4)),
+					'regions'		=> $this->regions->read_records(),
+					'fun'			=> $this->types->read_group(3),
+					'news'			=> $this->news->read_news(2,$region),
+					'name'			=> ""
+			);
+		$pagevar['name'] = 'Забронировать '.$pagevar['unit']['ctl_name'];
+		$pagevar['title'] .= $pagevar['name'].", ".$this->regions->read_city($region);
+		$this->load->view('users_interface/unit_book',$pagevar);
+	}
+	
+	function payment(){
+		
+	}
+	
+	function choice_zone(){
+		
+	}
+	
+	function map_of_sochi(){
+		
+	}
+	
+	function contacts(){
+		
+	}
+	
 	function insert_email(){
 		
 		if($this->input->post('addemail')):
