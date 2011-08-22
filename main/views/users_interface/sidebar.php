@@ -1,4 +1,14 @@
 <div class="list-sidebar">
+<?php if(isset($subtype)): ?>	
+	<h2 class="font-replace">Подразделы</h2>
+	<div id="subtype" class="widget clearfix">
+		<ul class="region-list">
+		<?php for($i=0;$i<count($subtype);$i++): ?>
+			<li><?=anchor('zone/'.$this->uri->segment(2).'/type/'.$subtype[$i]['tps_id'],$subtype[$i]['tps_name']);?></li>
+		<?php endfor; ?>
+		</ul>
+	</div>
+<?php endif; ?>	
 	<h2 class="font-replace">Погода</h2>
 	<div id="weather" class="widget clearfix">
 		<img width="45px" src="http://www.google.com/ig/images/weather/cloudy.gif" />

@@ -23,5 +23,24 @@ class Reviews extends CI_Model {
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
+	
+	function count_records(){
+		
+		$this->db->select('count(*) as cnt');
+		$this->db->order_by('rew_id DESC');
+		$query = $this->db->get('reviews');
+		$data = $query->result_array();
+		return $data[0]['cnt'];
+	}
+	
+	function read_limit_records($count,$from){
+		
+		$this->db->limit($count,$from);
+		$this->db->order_by('rew_id DESC');
+		$query = $this->db->get('reviews');
+		$data = $query->result_array();
+		if(count($data)) return $data;
+		return NULL;
+	}
 }
 ?>

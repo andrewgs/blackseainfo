@@ -12,42 +12,25 @@
 		<div id="content">
 			<div id="information" class="white-texture rounded clearfix">
 				<div class="list-main">
-			<?php if(count($unit)): ?>
-				<h2 class="font-replace"><?=$name;?></h2>
-				<div class="advertisment clearfix">
-				<?=$this->load->view('users_interface/book-form');?>
+					<h2><?=$name;?></h2>
 				</div>
-			<?php endif; ?>
+				<div class="list-sidebar">
+				<?php if(count($news)):?>
+					<h2 class="font-replace">Новости</h2>
+					<div id="news-stream" class="widget">
+					<?php for($i=0;$i<count($news);$i++):?>
+						<strong><?=$news[$i]['title'];?></strong>
+						<p><?=$news[$i]['text'];?><?=anchor('#','<nobr> Читать далее &raquo;</nobr>');?></p>
+					<?php endfor;?>
+					</div>
+				<?php endif; ?>
 				</div>
-				<?=$this->load->view('users_interface/sidebar');?>
 			</div>			
 		</div>
 	</div>
 	<?=$this->load->view('users_interface/footer');?>
 </div> <!--! end of #container -->
 <?=$this->load->view('users_interface/scripts');?>
-<script type="text/javascript">
-	$(document).ready(function(){
-	
-		$("#btnsubmit").click(function(event){
-			var err = false;
-			 $(".inpvalue").css('border-color','#D0D0D0');
-			 $("#error-msg").text('');
-			if($("#unit-title").val() == ''){
-				err = true;
-				$("#unit-title").css('border-color','#ff0000');
-			}
-			if($("#cust-info").val() == ''){
-				err = true;
-				$("#cust-info").css('border-color','#ff0000');
-			}
-			if(err){
-				event.preventDefault();
-				$("#error-msg").html('Пропущены обязательные поля');
-			}
-		});
-	});
-</script>
 <!--[if lt IE 7 ]>
 	<script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
 	<script>window.attachEvent("onload",function(){CFInstall.check({mode:"overlay"})})</script>

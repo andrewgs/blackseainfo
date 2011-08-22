@@ -8,21 +8,29 @@ $route['404_override'] = '';
 $route[''] = "users_interface/index";
 $route['admin']	= "users_interface/admin_login";
 $route['zone/:num']	= "users_interface/zone_content";
+$route['zone/:num/type/:num'] = "users_interface/zone_subcontent";
 $route['zone/:num/catalog/:num/information'] = "users_interface/unit_information";
-$route['zone/1/catalog/1/book'] = "users_interface/unit_book";
+$route['zone/:num/type/:num/catalog/:num/book'] = "users_interface/unit_book";
 
-$route['fun/:num']	= "users_interface/choice_zone";
-$route['reviews'] = "users_interface/choice_zone";
 $route['book'] = "users_interface/choice_zone";
 $route['resorts-photo'] = "users_interface/choice_zone";
 $route['video'] = "users_interface/choice_zone";
 $route['camers'] = "users_interface/choice_zone";
 $route['news'] = "users_interface/choice_zone";
-$route['weather'] = "users_interface/choice_zone";
 
+$route['zone/:num/book'] = "users_interface/order";
+$route['zone/:num/news'] = "users_interface/zone_news";
+$route['zone/:num/news/:num'] = "users_interface/zone_news";
+$route['zone/:num/resorts-photo'] = "users_interface/resorts_photo";
+$route['zone/:num/video'] = "users_interface/video";
+$route['zone/:num/camers'] = "users_interface/camers";
+
+$route['weather'] = "users_interface/weather";
 $route['payment'] = "users_interface/payment";
-$route['map-of-sochi'] = "users_interface/map_of_sochi";
+$route['map-of-sochi'] = "users_interface/map";
 $route['contacts'] = "users_interface/contacts";
+$route['reviews'] = "users_interface/reviews";
+$route['reviews/:num'] = "users_interface/reviews";
 
 $route['catalog/viewimage/:num'] = "users_interface/viewimage";
 $route['unit/viewimage/:num'] = "users_interface/viewimage";

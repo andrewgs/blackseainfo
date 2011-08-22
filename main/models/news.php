@@ -25,5 +25,26 @@ class News extends CI_Model {
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
+	
+	function count_records($region){
+		
+		$this->db->select('count(*) as cnt');
+		$this->db->where('region',$region);
+		$this->db->order_by('date DESC');
+		$query = $this->db->get('news');
+		$data = $query->result_array();
+		return $data[0]['cnt'];
+	}
+	
+	function read_limit_records($region,$count,$from){
+		
+		$this->db->where('region',$region);
+		$this->db->limit($count,$from);
+		$this->db->order_by('date DESC');
+		$query = $this->db->get('news');
+		$data = $query->result_array();
+		if(count($data)) return $data;
+		return NULL;
+	}
 }
 ?>

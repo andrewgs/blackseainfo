@@ -9,14 +9,6 @@
 			</ul>
 		</div>
 		<div class="column">
-			<h3>Развлечения</h3>
-			<ul>
-			<?php for($i=0;$i<count($fun);$i++): ?>
-				<li><?=anchor('fun/'.$fun[$i]['tps_id'],$fun[$i]['tps_name']);?></li>
-			<?php endfor; ?>
-			</ul>
-		</div>
-		<div class="column">
 			<h3>Наши услуги</h3>
 			<ul>
 				<li><?=anchor('resorts-photo','Фотографии курортов');?></li>
@@ -36,8 +28,8 @@
 			<h3>Наши услуги</h3>
 			<ul>
 				<li><?=anchor('contacts','Контакты');?></li>
-				<li><?=anchor('#','info@blackseainfo.ru');?></li>
-				<li><?=anchor('#','sales@blackseainfo.ru');?></li>
+				<li><?=safe_mailto('info@blackseainfo.ru','info@blackseainfo.ru');?></li>
+				<li><?=safe_mailto('sales@blackseainfo.ru','sales@blackseainfo.ru');?></li>
 				<li><?=anchor('#','blackseainfo (skype)');?></li>
 			</ul>
 		</div>
