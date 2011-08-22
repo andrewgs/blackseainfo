@@ -58,7 +58,9 @@ class Users_interface extends CI_Controller {
 	
 	function zone_content(){
 	
-		$region = $this->uri->segment(2);
+		$region = $this->regions->region_exist($this->uri->segment(2));
+		if(!$region) show_404();
+		
 		$pagevar = array(
 					'description'	=> '',
 					'author'		=> '',
@@ -83,47 +85,14 @@ class Users_interface extends CI_Controller {
 		$this->load->view('users_interface/content',$pagevar);
 	}
 	
-	function zone_subcontent(){
-	
-		$region = $this->uri->segment(2);
-		if(!$this->regions->region_exist($region)):
-			show_404();
-		endif;
-		$type = $this->uri->segment(4);
-		if(!$this->types->type_exist($type)):
-			show_404();
-		endif;
-		$pagevar = array(
-					'description'	=> '',
-					'author'		=> '',
-					'title'			=> "BlackSeaInfo.ru - ".$this->regions->read_city($region),
-					'baseurl' 		=> base_url(),
-					'userinfo'		=> $this->user,
-					'catalog'		=> $this->catalog->read_subtype_zone($region,$type),
-					'regions'		=> $this->regions->read_records(),
-					'subtype'		=> $this->types->read_groups(),
-					'news'			=> $this->news->read_news(2,$region),
-					'uri_string'	=> ''
-			);
-		
-		for($i = 0;$i < count($pagevar['news']); $i++):
-			if(mb_strlen($pagevar['news'][$i]['text'],'UTF-8') > 270):									
-				$pagevar['news'][$i]['text'] = mb_substr($pagevar['news'][$i]['text'],0,270,'UTF-8');	
-				$pos = mb_strrpos($pagevar['news'][$i]['text'],' ',0,'UTF-8');
-				$pagevar['news'][$i]['text'] = mb_substr($pagevar['news'][$i]['text'],0,$pos,'UTF-8');
-				$pagevar['news'][$i]['text'] .= ' ... ';
-			endif;
-		endfor;
-		$this->load->view('users_interface/content',$pagevar);
-	}
-	
 	function unit_information(){
 		
-		$region = $this->uri->segment(2);
-		$unit = $this->uri->segment(4);
-		if(!$this->catalog->unit_exist($unit)):
-			show_404();
-		endif;
+		$region = $this->regions->region_exist($this->uri->segment(2));
+		if(!$region) show_404();
+		
+		$unit = $this->catalog->unit_exist($this->uri->segment(3));
+		if(!$unit) show_404();
+		
 		$pagevar = array(
 					'description'	=> '',
 					'author'		=> '',
@@ -132,7 +101,6 @@ class Users_interface extends CI_Controller {
 					'userinfo'		=> $this->user,
 					'unit'			=> $this->catalog->read_unit($unit),
 					'regions'		=> $this->regions->read_records(),
-					'fun'			=> $this->types->read_group(3),
 					'news'			=> $this->news->read_news(2,$region),
 					'uri_string'	=> ''
 			);
@@ -142,11 +110,12 @@ class Users_interface extends CI_Controller {
 	
 	function unit_book(){
 		
-		$region = $this->uri->segment(2);
-		$unit = $this->uri->segment(6);
-		if(!$this->catalog->unit_exist($unit)):
-			show_404();
-		endif;
+		$region = $this->regions->region_exist($this->uri->segment(2));
+		if(!$region) show_404();
+		
+		$unit = $this->catalog->unit_exist($this->uri->segment(3));
+		if(!$unit) show_404();
+		
 		$pagevar = array(
 					'description'	=> '',
 					'author'		=> '',
@@ -170,6 +139,37 @@ class Users_interface extends CI_Controller {
 		
 		$pagevar['title'] .= $pagevar['unit']['ctl_name'].", ".$this->regions->read_city($region);
 		$this->load->view('users_interface/unit_book',$pagevar);
+	}
+	
+	function zone_subcontent(){
+	
+		$region = $this->regions->region_exist($this->uri->segment(2));
+		if(!$region) show_404();
+		
+		$type = $this->types->type_exist($this->uri->segment(3));
+		if(!$type) show_404();
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - ".$this->regions->read_city($region),
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'catalog'		=> $this->catalog->read_subtype_zone($region,$type),
+					'regions'		=> $this->regions->read_records(),
+					'subtype'		=> $this->types->read_groups(),
+					'news'			=> $this->news->read_news(2,$region),
+					'uri_string'	=> ''
+			);
+		
+		for($i = 0;$i < count($pagevar['news']); $i++):
+			if(mb_strlen($pagevar['news'][$i]['text'],'UTF-8') > 270):									
+				$pagevar['news'][$i]['text'] = mb_substr($pagevar['news'][$i]['text'],0,270,'UTF-8');	
+				$pos = mb_strrpos($pagevar['news'][$i]['text'],' ',0,'UTF-8');
+				$pagevar['news'][$i]['text'] = mb_substr($pagevar['news'][$i]['text'],0,$pos,'UTF-8');
+				$pagevar['news'][$i]['text'] .= ' ... ';
+			endif;
+		endfor;
+		$this->load->view('users_interface/content',$pagevar);
 	}
 	
 	function payment(){

@@ -7,10 +7,11 @@ $route['404_override'] = '';
 
 $route[''] = "users_interface/index";
 $route['admin']	= "users_interface/admin_login";
-$route['zone/:num']	= "users_interface/zone_content";
-$route['zone/:num/type/:num'] = "users_interface/zone_subcontent";
-$route['zone/:num/catalog/:num/information'] = "users_interface/unit_information";
-$route['zone/:num/type/:num/catalog/:num/book'] = "users_interface/unit_book";
+
+$route['resort/:any/:any/:num/book'] = "users_interface/unit_book";
+$route['resort/:any/:any/information'] = "users_interface/unit_information";
+$route['resort/:any/:any'] = "users_interface/zone_subcontent";
+$route['resort/:any']	= "users_interface/zone_content";
 
 $route['book'] = "users_interface/choice_zone";
 $route['resorts-photo'] = "users_interface/choice_zone";

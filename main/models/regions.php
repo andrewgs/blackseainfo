@@ -7,6 +7,7 @@ class Regions extends CI_Model {
 	var $reg_area 		= "";
 	var $reg_district	= "";
 	var $reg_priority	= 0;
+	var $reg_alias		= "";
 	
 	function __construct(){
         
@@ -33,25 +34,6 @@ class Regions extends CI_Model {
 		else NULL;
 	}
 	
-	function search_region($search){
-		
-		$this->db->select('reg_id AS id,reg_name AS title');
-		$this->db->like('reg_name',$search);
-		$this->db->order_by('reg_name');
-		$query = $this->db->get('regions');
-		$data = $query->result_array();
-		if(count($data)) return $data;
-		return NULL;
-	}
-	
-	function read_records_by_district(){
-		
-		$this->db->order_by('reg_district','ASC');
-		$this->db->order_by('reg_name','ASC');
-		$query = $this->db->get('regions');
-		return $query->result_array();
-	}
-	
 	function read_record($id){
 		
 		$this->db->where('reg_id',$id);
@@ -61,39 +43,6 @@ class Regions extends CI_Model {
 		return NULL;
 	}
 	
-	function read_districts(){
-		
-		$this->db->select('reg_id AS id,reg_district AS title');
-		$this->db->order_by('reg_district','ASC');
-		$this->db->group_by('reg_district');
-		$query = $this->db->get('regions');
-		$data = $query->result_array();
-		if(count($data)) return $data;
-		else NULL;
-	}
-	
-	function read_area($district){
-		
-		$this->db->select('reg_id AS id,reg_area AS title');
-		$this->db->where('reg_district',$district);
-		$this->db->order_by('reg_area','ASC');
-		$this->db->group_by('reg_area');
-		$query = $this->db->get('regions');
-		$data = $query->result_array();
-		if(count($data)) return $data;
-		else NULL;
-	}
-	
-	function read_cities($area){
-		
-		$this->db->select('reg_id AS id,reg_name AS title');
-		$this->db->where('reg_area',$area);
-		$this->db->order_by('reg_name','ASC');
-		$query = $this->db->get('regions');
-		$data = $query->result_array();
-		if(count($data)) return $data;
-		else NULL;
-	}
 	
 	function insert_record($insertdata){
 			
@@ -102,34 +51,6 @@ class Regions extends CI_Model {
 		$this->reg_district	= $insertdata['district'];
 		$this->db->insert('regions',$this);
 		return $this->db->insert_id();
-	}
-
-	function full_name($rid){
-	
-		$this->db->select('reg_area,reg_district');
-		$this->db->where('reg_id',$rid);
-		$query = $this->db->get('regions',1);
-		$data = $query->result_array();
-		if(isset($data[0])) return $data[0];
-		return NULL;
-	}
-
-	function read_field($regid,$field){
-			
-		$this->db->where('reg_id',$regid);
-		$query = $this->db->get('regions',1);
-		$data = $query->result_array();
-		if(isset($data[0])) return $data[0][$field];
-		return FALSE;
-	}
-
-	function region_id($field,$parameter){
-			
-		$this->db->where($field,$parameter);
-		$query = $this->db->get('regions',1);
-		$data = $query->result_array();
-		if(count($data)>0) return $data[0]['reg_id'];
-		return FALSE;
 	}
 
 	function save_region($id,$name,$area,$dictr){
@@ -142,12 +63,13 @@ class Regions extends CI_Model {
 		return $this->db->affected_rows();
 	}
 
-	function region_exist($id){
-			
-		$this->db->where('reg_id',$id);
+	function region_exist($alias){
+		
+		$this->db->select('reg_id');
+		$this->db->where('reg_alias',$alias);
 		$query = $this->db->get('regions',1);
 		$data = $query->result_array();
-		if(count($data)) return TRUE;
+		if(count($data)) return $data[0]['reg_id'];
 		return FALSE;
 	}
 }

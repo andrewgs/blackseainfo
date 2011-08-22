@@ -16,13 +16,15 @@
 			<?php $type = ""; ?>
 			<?php $count = 0; ?>
 			<?php for($i=0;$i<count($catalog);$i++): ?>
-			<?php $inf = $this->uri->uri_string()."/catalog/".$catalog[$i]['ctl_id']."/information";?>
-			<?php $form = $this->uri->uri_string()."/type/".$catalog[$i]['ctl_type']."/catalog/".$catalog[$i]['ctl_id']."/book";?>
+			<?php $inf = "resort/".$this->uri->segment(2)."/".$catalog[$i]['ctl_alias']."/information";?>
+			<?php $form = "resort/".$this->uri->segment(2)."/".$catalog[$i]['ctl_alias']."/".$catalog[$i]['ctl_type']."/book";?>
 		<?php switch ($catalog[$i]['ctl_type']):
-			case '1' : $title='Места отдыха';$link=anchor($inf.'#price','Все цены').anchor($inf,'Описание').anchor($form,'Забронировать');break;
-			case '2' : $title='Экскурсии';$link=anchor($inf,'Описание экскурсии').anchor($form,'Оставить заявку');break;
-			case '3' : $title='Развлечения';$link=anchor($inf,'Описание заведения').anchor($form,'Забронировать билеты');break;
-			case '4' : $title='Такси';$link=anchor($inf,'Полный список такси').anchor($form,'Заказать такси');break;
+			case '1' : $title='Места отдыха';
+					   $link=anchor($inf.'#price','Все цены').anchor($inf,'Описание').anchor($form,'Забронировать',array('class'=>'book'));break;
+			case '2' : $title='Экскурсии';$link=anchor($inf,'Описание экскурсии').anchor($form,'Оставить заявку',array('class'=>'book'));break;
+			case '3' : $title='Развлечения';
+					   $link=anchor($inf,'Описание заведения').anchor($form,'Забронировать билеты',array('class'=>'book'));break;
+			case '4' : $title='Такси';$link=anchor($inf,'Полный список такси').anchor($form,'Заказать такси',array('class'=>'book'));break;
 		endswitch; ?>
 				<?php $cur_type = $catalog[$i]['ctl_type']; ?>
 				<?php if($type != $cur_type):?>

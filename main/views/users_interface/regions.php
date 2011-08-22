@@ -17,7 +17,7 @@
 			<?php $area = $cur_area; ?>
 			<?php endif; ?>
 		<?php endif; ?>
-			<li><?=anchor('zone/'.$regions[$i]['reg_id'].'/'.$uri_string,$regions[$i]['reg_name']);?></li>
+			<li><?=anchor('resort/'.$regions[$i]['reg_alias'].'/'.$uri_string,$regions[$i]['reg_name']);?></li>
 	<?php endfor; ?>
 		</ul>				
 	</div>

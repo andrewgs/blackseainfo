@@ -14,6 +14,7 @@
 				<div class="list-main">
 			<?php if(count($unit)): ?>
 				<div class="advertisment clearfix">
+					<h2 class="font-replace"><?=$unit['ctl_name'];?></h2>
 				<img src="<?=$baseurl;?>catalog/viewimage/<?=$unit['ctl_id'];?>" alt="<?=$unit['ctl_name'];?>" title="<?=$unit['ctl_name'];?>"/>
 					<div><?=$unit['ctl_note'];?></div>
 					<a name="price"></a>

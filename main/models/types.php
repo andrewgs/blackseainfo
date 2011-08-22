@@ -6,6 +6,7 @@ class Types extends CI_Model {
 	var $tps_name 	= "";
 	var $tps_group	= 0;
 	var $tps_visible= 1;
+	var $tps_alias	= "";
 	
 	function __construct(){
         
@@ -49,12 +50,13 @@ class Types extends CI_Model {
 		return NULL;
 	}
 	
-	function type_exist($id){
-			
-		$this->db->where('tps_id',$id);
+	function type_exist($alias){
+		
+		$this->db->select('tps_id');
+		$this->db->where('tps_alias',$alias);
 		$query = $this->db->get('types',1);
 		$data = $query->result_array();
-		if(count($data)) return TRUE;
+		if(count($data)) return $data[0]['tps_id'];
 		return FALSE;
 	}
 }

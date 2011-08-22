@@ -4,7 +4,7 @@
 	<div id="subtype" class="widget clearfix">
 		<ul class="region-list">
 		<?php for($i=0;$i<count($subtype);$i++): ?>
-			<li><?=anchor('zone/'.$this->uri->segment(2).'/type/'.$subtype[$i]['tps_id'],$subtype[$i]['tps_name']);?></li>
+			<li><?=anchor('resort/'.$this->uri->segment(2).'/'.$subtype[$i]['tps_alias'],$subtype[$i]['tps_name']);?></li>
 		<?php endfor; ?>
 		</ul>
 	</div>
