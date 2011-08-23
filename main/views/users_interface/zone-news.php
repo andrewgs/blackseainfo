@@ -12,21 +12,21 @@
 		<div id="content">
 			<div id="information" class="white-texture rounded clearfix">
 				<div class="list-main">
-			<?php if(count($zonenews)): ?>
+					<?php if(count($zonenews)): ?>
 					<h2 class="font-replace"><?=$name;?></h2>
-				<?php for($i=0;$i<count($zonenews);$i++): ?>
+					<?php for($i=0;$i<count($zonenews);$i++): ?>
 					<div class="comment">
 						<div class=""><?=$zonenews[$i]['date'];?></div>
 						<div class=""><?=$zonenews[$i]['title'];?></div>
 						<div class=""><?=$zonenews[$i]['text'];?></div>
 					</div>
-				<?php endfor;?>
-			<?php else: ?>
+					<?php endfor;?>
+					<?php else: ?>
 					<h2 class="font-replace">Информация отсутствует</h2>
-			<?php endif; ?>
-				<?php if($pages): ?>
-					<?=$pages;?>
-				<?php endif;?>
+					<?php endif; ?>
+					<?php if($pages): ?>
+						<?=$pages;?>
+					<?php endif;?>
 				</div>
 				<?=$this->load->view('users_interface/sidebar');?>
 			</div>			

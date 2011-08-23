@@ -200,7 +200,7 @@ class Users_interface extends CI_Controller {
 					'regions'		=> $this->regions->read_records(),
 					'fun'			=> $this->types->read_group(3),
 					'news'			=> $this->news->read_news(2,0),
-					'name'			=> "&larr; Выберите зону отдыха",
+					'name'			=> "Выберите зону отдыха",
 					'uri_string'	=> $this->uri->uri_string()
 			);
 		$this->load->view('users_interface/choice-zone',$pagevar);

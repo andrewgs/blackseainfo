@@ -12,7 +12,7 @@
 		<div id="content">
 			<div id="information" class="white-texture rounded clearfix">
 				<div class="list-main">
-					<h2><?=$name;?></h2>
+					<h2 class="font-replace"><img src="<?=$baseurl;?>images/left-arrow.png"/><?=$name;?></h2>
 				</div>
 				<div class="list-sidebar">
 				<?php if(count($news)):?>
