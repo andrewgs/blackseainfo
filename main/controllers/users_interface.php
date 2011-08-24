@@ -222,6 +222,8 @@ class Users_interface extends CI_Controller {
 	
 	function choice_zone(){
 		
+		$uri = $this->uri->uri_string();
+		
 		$pagevar = array(
 					'description'	=> '',
 					'author'		=> '',
@@ -232,8 +234,15 @@ class Users_interface extends CI_Controller {
 					'fun'			=> $this->types->read_group(3),
 					'news'			=> $this->news->read_news(2,0),
 					'name'			=> "Выберите зону отдыха",
-					'uri_string'	=> $this->uri->uri_string()
+					'materials'		=> array(),
+					'uri_string'	=> $uri
 			);
+		switch ($uri):
+			case 'resorts-photo' : $pagevar['materials'] = $this->materials->no_zone_records(6,1); break;
+			case 'video' : $pagevar['materials'] = $this->materials->no_zone_records(4,2); break;
+			case 'camers' : $pagevar['materials'] = $this->materials->no_zone_records(4,3); break;
+		endswitch;
+		
 		$this->load->view('users_interface/choice-zone',$pagevar);
 	}
 	

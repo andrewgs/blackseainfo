@@ -13,6 +13,25 @@
 			<div id="information" class="white-texture rounded clearfix">
 				<div class="list-main">
 					<h2 class="font-replace"><img src="<?=$baseurl;?>images/left-arrow.png"/><?=$name;?></h2>
+			<?php if(count($materials)):?>
+				<?php for($i=0;$i<count($materials);$i++): ?>
+					<div class="frames">
+					<?php	
+						switch ($uri_string):
+							case 'resorts-photo' : 
+								echo '<a href="#"><img src="'.$baseurl.'material/viewimage/'.$materials[$i]['id'].'" alt="'.$materials[$i]['title'].'" title="'.$materials[$i]['title'].'"/></a>';
+								break;
+							case 'video' : 
+								echo '<iframe src="'.$materials[$i]['link'].'" width="210" height="118" frameborder="0"></iframe>'; 
+								break;
+							case 'camers' :
+								echo '<a href="#"><img src="'.$baseurl.'material/viewimage/'.$materials[$i]['id'].'" alt="'.$materials[$i]['title'].'" title="'.$materials[$i]['title'].'"/></a>';
+								break;
+						endswitch;
+					?>	
+					</div>
+				<?php endfor; ?>
+			<?php endif; ?>	
 				</div>
 				<div class="list-sidebar">
 				<?php if(count($news)):?>

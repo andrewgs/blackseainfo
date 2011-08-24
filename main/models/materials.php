@@ -31,6 +31,13 @@ class Materials extends CI_Model {
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
+
+	function no_zone_records($count,$type){
+		
+		$sql = "SELECT id,title,note,link,type,region FROM materials WHERE type = $type ORDER BY rand() LIMIT $count"; 
+		$query = $this->db->query($sql);
+		return $query->result_array();
+	}
 	
 	function main_slide($count,$type){
 		
