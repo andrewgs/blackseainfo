@@ -13,45 +13,18 @@
 			<div id="slideshow">
 				<div class="slide-wrapper">
 					<div id="slides">
+				<?php for($i=0;$i<count($slide);$i++):?>	
+					
 						<div class="slide-single">
 							<a class="slide-link" href="#">
-								<img src="<?=$baseurl;?>images/slide-1.jpg" alt="" />						
+								<img src="<?=$baseurl;?>material/viewimage/<?=$slide[$i]['id'];?>" alt="<?=$slide[$i]['title'];?>" title="<?=$slide[$i]['title'];?>" width="540" height="360"/>
 							</a>
 							<div class="slide-desc">
-								<h2>Курортный поселок Лазаревское</h2>
-								<p>
-									Идеальное место для спокойного, но интересного и насыщенного отдыха. Лазаревское 
-									это самый северный курорт Сочи. Древняя благодатная земля, окаймленная теплым 
-									морем и живописными отрогами Северного Кавказа, призывно влечет к себе.
-								</p>
+								<h2><?=$slide[$i]['title'];?></h2>
+								<p><?=$slide[$i]['note'];?></p>
 							</div>							
 						</div>
-						<div class="slide-single">
-							<a class="slide-link" href="#">
-								<img src="<?=$baseurl;?>images/slide-2.jpg" alt="" />						
-							</a>
-							<div class="slide-desc">
-								<h2>Анапа</h2>
-								<p>
-									Преимущество курортной Анапы перед своими российскими и крымскими конкурентами 
-									курортами на Черном море – это прекраснейшие песчаные пляжи, протянувшиеся воль 
-									побережья почти на 40 километров.
-								</p>
-							</div>							
-						</div>
-						<div class="slide-single">
-							<a class="slide-link" href="#">
-								<img src="<?=$baseurl;?>images/slide-3.jpg" alt="" />						
-							</a>
-							<div class="slide-desc">
-								<h2>Абрау-Дюрсо</h2>
-								<p>
-									Жемчужиной редкой красоты, уникального достоинства называют Абрау-Дюрсо, заповедное 
-									место на Северном Кавказе в окрестностях города Новороссийска. Вокруг поселка и в долине 
-									реки Дюрсо расположены виноградники.
-								</p>
-							</div>							
-						</div>
+					<?php endfor; ?>
 					</div>
 					<a id="slide-prev" href="#">Пред.</a>
 					<a id="slide-next" href="#">След.</a>					
@@ -59,7 +32,7 @@
 			</div>
 			<div id="company-services" class="white-texture rounded">
 				<div class="service-node">
-					<?=anchor('news','<h2 class="font-replace">Новости.</h2>');?>
+					<?=anchor('news','<h2 class="font-replace">Новости</h2>');?>
 					<p>
 						Освещение наиболее значимых социальных новостей из жизни прибрежных 
 						городов, проводимых мероприятий и происходящих событий. Каждый 
@@ -68,7 +41,7 @@
 					</p>
 				</div>
 				<div class="service-node">
-					<?=anchor('resorts-photo','<h2 class="font-replace">Фотопленка.</h2>');?>
+					<?=anchor('resorts-photo','<h2 class="font-replace">Фотопленка</h2>');?>
 					<p>
 						Фотоальбом с наиболее яркими фотографиями и описаниями достопримечательностей
 						курортов Краснодарского края. Коллекция фотографий регулярно пополняется и 
@@ -76,7 +49,7 @@
 					</p>
 				</div>
 				<div class="service-node">
-					<?=anchor('camers','<h2 class="font-replace">Прямой эфир.</h2>');?>
+					<?=anchor('camers','<h2 class="font-replace">Прямой эфир</h2>');?>
 					<p>
 						Уникальная возможность увидеть в режиме онлайн морские волны, услышать шум 
 						южных ветров и почувствовать курортное настроение. Наши веб-камеры постоянно 
@@ -84,7 +57,7 @@
 					</p>
 				</div>
 				<div class="service-node">
-					<?=anchor('#','<h2 class="font-replace">Обновления.</h2>');?>
+					<?=anchor('#','<h2 class="font-replace">Обновления</h2>');?>
 					<p>
 						Мы постоянно обновляем нашу базу данных гостиниц, парков, ресторанов, пансинонатов,
 						служб такси и проводимых экскурсионных туров. В виду постоянного сотрудничества с
@@ -93,7 +66,7 @@
 					</p>
 				</div>
 				<div class="service-node">
-					<?=anchor('#','<h2 class="font-replace">Сотрудничество.</h2>');?>
+					<?=anchor('#','<h2 class="font-replace">Сотрудничество</h2>');?>
 					<p>
 						Мы всегда рады новым партнерам и участниками проекта. Если вы являетесь представителем или
 						владельцем гостиницы, парка развлечений, службы такси или другой курортной службы, вы 
@@ -101,7 +74,7 @@
 					</p>
 				</div>
 				<div class="service-node">
-					<?=anchor('contacts','<h2 class="font-replace">Контакты.</h2>');?>
+					<?=anchor('contacts','<h2 class="font-replace">Контакты</h2>');?>
 					<p>
 						Вы можете встретиться с нами по следующему адресу:<br/> 
 						г.Новороссийск,<br/>

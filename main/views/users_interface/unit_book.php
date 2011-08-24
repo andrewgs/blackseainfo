@@ -37,15 +37,26 @@
 				err = true;
 				$("#unit-title").css('border-color','#ff0000');
 			}
+			if($("#cust-email").val() == ''){
+				err = true;
+				$("#cust-email").css('border-color','#ff0000');
+			}
 			if($("#cust-info").val() == ''){
 				err = true;
 				$("#cust-info").css('border-color','#ff0000');
 			}
 			if(err){
 				event.preventDefault();
-				$("#error-msg").html('Пропущены обязательные поля');
+				$("#error-msg").html('<font size="2" color="#FF0000"><b>Пропущены обязательные поля</font>');
+			}else if(!isValidEmailAddress($("#cust-email").val())){
+				event.preventDefault();
+				$("#error-msg").html('<font size="2" color="#FF0000"><b>Не верный E-mail</b></font>');
 			}
 		});
+		function isValidEmailAddress(emailAddress){
+			var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+			return pattern.test(emailAddress);
+		};
 	});
 </script>
 <!--[if lt IE 7 ]>

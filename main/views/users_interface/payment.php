@@ -14,7 +14,6 @@
 				<div class="list-main">
 					<h2 class="font-replace">Способы оплаты</h2>
 				</div>
-				<?=$this->load->view('users_interface/sidebar');?>
 			</div>			
 		</div>
 	</div>

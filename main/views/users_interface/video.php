@@ -11,10 +11,17 @@
 		<?=$this->load->view('users_interface/regions');?>
 		<div id="content">
 			<div id="information" class="white-texture rounded clearfix">
-				<div class="list-main">
+				<div class="list-main wide clearfix">
 					<h2 class="font-replace"><?=$name;?></h2>
+					<div id="photo-frames">
+				<?php for($i=0;$i<count($video);$i++): ?>
+						<div class="frames">
+							<iframe src="<?=$video[$i]['link'];?>" width="210" height="118" frameborder="0"></iframe>
+						</div>
+				<?php endfor; ?>		
+						</div>
+					</div>
 				</div>
-				<?=$this->load->view('users_interface/sidebar');?>
 			</div>			
 		</div>
 	</div>

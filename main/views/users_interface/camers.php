@@ -11,10 +11,18 @@
 		<?=$this->load->view('users_interface/regions');?>
 		<div id="content">
 			<div id="information" class="white-texture rounded clearfix">
-				<div class="list-main">
+				<div class="list-main wide clearfix">
 					<h2 class="font-replace"><?=$name;?></h2>
+					<div id="photo-frames">
+				<?php for($i=0;$i<count($camers);$i++): ?>
+						<div class="frames">
+							<a href="#">
+								<img src="<?=$baseurl;?>material/viewimage/<?=$camers[$i]['id'];?>" alt="<?=$camers[$i]['title'];?>" title="<?=$camers[$i]['title'];?>"/>
+						</a>
+					</div>
+				<?php endfor; ?>
+					</div>
 				</div>
-				<?=$this->load->view('users_interface/sidebar');?>
 			</div>			
 		</div>
 	</div>

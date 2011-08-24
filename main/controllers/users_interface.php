@@ -18,6 +18,7 @@ class Users_interface extends CI_Controller {
 		$this->load->model('news');
 		$this->load->model('materials');
 		$this->load->model('union');
+		$this->load->model('booking');
 		$cookieuid = $this->session->userdata('login_id');
 		if(isset($cookieuid) and !empty($cookieuid)):
 			$this->user['uid'] = $this->session->userdata('userid');
@@ -49,6 +50,7 @@ class Users_interface extends CI_Controller {
 					'title'			=> 'BlackSeaInfo.ru - Главная',
 					'baseurl' 		=> base_url(),
 					'userinfo'		=> $this->user,
+					'slide'			=> $this->materials->main_slide(10,1),
 					'regions'		=> $this->regions->read_records(),
 					'reviews'		=> $this->reviews->read_reviews(2),
 					'uri_string'	=> ''
@@ -70,6 +72,8 @@ class Users_interface extends CI_Controller {
 					'catalog'		=> $this->catalog->read_catalog_zone($region),
 					'regions'		=> $this->regions->read_records(),
 //					'subtype'		=> $this->types->read_groups(),
+					'slide'			=> $this->materials->read_limit_records($region,5,1),
+					'video'			=> $this->materials->read_limit_records($region,2,2),
 					'subtype'		=> $this->union->zone_subtype($region),
 					'news'			=> $this->news->read_news(2,$region),
 					'uri_string'	=> ''
@@ -102,6 +106,8 @@ class Users_interface extends CI_Controller {
 					'userinfo'		=> $this->user,
 					'unit'			=> $this->catalog->read_unit($unit),
 					'regions'		=> $this->regions->read_records(),
+					'slide'			=> $this->materials->read_limit_records($region,5,1),
+					'video'			=> $this->materials->read_limit_records($region,2,2),
 					'news'			=> $this->news->read_news(2,$region),
 					'uri_string'	=> ''
 			);
@@ -113,10 +119,10 @@ class Users_interface extends CI_Controller {
 		
 		$region = $this->regions->region_exist($this->uri->segment(2));
 		if(!$region) show_404();
-		
 		$unit = $this->catalog->unit_exist($this->uri->segment(3));
 		if(!$unit) show_404();
-		
+		$type = $this->uri->segment(4);
+		if(!$this->types->type_idexist($type)) show_404();
 		$pagevar = array(
 					'description'	=> '',
 					'author'		=> '',
@@ -126,11 +132,28 @@ class Users_interface extends CI_Controller {
 					'unit'			=> $this->catalog->read_unit($unit),
 					'regions'		=> $this->regions->read_records(),
 					'fun'			=> $this->types->read_group(3),
+					'slide'			=> $this->materials->read_limit_records($region,5,1),
+					'video'			=> $this->materials->read_limit_records($region,2,2),
 					'news'			=> $this->news->read_news(2,$region),
 					'name'			=> '',
 					'uri_string'	=> ''
 			);
-		switch ($this->uri->segment(4)):
+		if($this->input->post('submit')):
+			$this->form_validation->set_rules('title','','required|htmlspecialchars|trim');
+			$this->form_validation->set_rules('email','','required|valid_email|trim');
+			$this->form_validation->set_rules('note','','required|strip_tags|trim');
+			if(!$this->form_validation->run()):
+				$_POST['submit'] = NULL;
+				$this->unit_book();
+				return FALSE;
+			else:
+				$_POST['submit'] = NULL;
+				$this->booking->insert_record($unit,$region,$type,$_POST);
+				$this->session->set_userdata('saccessfull',TRUE);
+				redirect($this->uri->uri_string());
+			endif;
+		endif;
+		switch ($type):
 			case '1' : $pagevar['name'] = 'Бронирование места:'; break;
 			case '2' : $pagevar['name'] = 'Оставить заявку на участие:'; break;
 			case '3' : $pagevar['name'] = 'Бронирование билетов:'; break;
@@ -139,6 +162,12 @@ class Users_interface extends CI_Controller {
 		endswitch;
 		
 		$pagevar['title'] .= $pagevar['unit']['ctl_name'].", ".$this->regions->read_city($region);
+		$saccessfull = $this->session->userdata('saccessfull');
+		if($saccessfull):
+			$this->session->unset_userdata('saccessfull');
+			$this->load->view('users_interface/thanks',$pagevar);
+			return TRUE;
+		endif;
 		$this->load->view('users_interface/unit_book',$pagevar);
 	}
 	
@@ -158,6 +187,8 @@ class Users_interface extends CI_Controller {
 					'catalog'		=> $this->catalog->read_subtype_zone($region,$type),
 					'regions'		=> $this->regions->read_records(),
 //					'subtype'		=> $this->types->read_groups(),
+					'slide'			=> $this->materials->read_limit_records($region,5,1),
+					'video'			=> $this->materials->read_limit_records($region,2,2),
 					'subtype'		=> $this->union->zone_subtype($region),
 					'news'			=> $this->news->read_news(2,$region),
 					'uri_string'	=> ''
@@ -220,11 +251,35 @@ class Users_interface extends CI_Controller {
 					'userinfo'		=> $this->user,
 					'unit'			=> array('ctl_name'=>''),
 					'regions'		=> $this->regions->read_records(),
+					'slide'			=> $this->materials->read_limit_records($region,5,1),
+					'video'			=> $this->materials->read_limit_records($region,2,2),
 					'fun'			=> $this->types->read_group(3),
 					'news'			=> $this->news->read_news(2,$region),
 					'name'			=> $regname.'<br/>Бронирование:',
 					'uri_string'	=> ''
 			);
+			
+		if($this->input->post('submit')):
+			$this->form_validation->set_rules('title','','required|htmlspecialchars|trim');
+			$this->form_validation->set_rules('email','','required|valid_email|trim');
+			$this->form_validation->set_rules('note','','required|strip_tags|trim');
+			if(!$this->form_validation->run()):
+				$_POST['submit'] = NULL;
+				$this->order();
+				return FALSE;
+			else:
+				$_POST['submit'] = NULL;
+				$this->booking->insert_record(0,$region,0,$_POST);
+				$this->session->set_userdata('saccessfull',TRUE);
+				redirect($this->uri->uri_string());
+			endif;
+		endif;
+		$saccessfull = $this->session->userdata('saccessfull');
+		if($saccessfull):
+			$this->session->unset_userdata('saccessfull');
+			$this->load->view('users_interface/thanks',$pagevar);
+			return TRUE;
+		endif;
 		$this->load->view('users_interface/unit_book',$pagevar);
 		
 	}
@@ -244,6 +299,7 @@ class Users_interface extends CI_Controller {
 					'regions'		=> $this->regions->read_records(),
 					'news'			=> $this->news->read_news(2,$region),
 					'name'			=> $regname.'<br/>Фотографии курортов:',
+					'images'		=> $this->materials->read_records($region,1),
 					'uri_string'	=> ''
 			);
 		$this->load->view('users_interface/resorts-photo',$pagevar);
@@ -263,6 +319,7 @@ class Users_interface extends CI_Controller {
 					'unit'			=> array(),
 					'regions'		=> $this->regions->read_records(),
 					'news'			=> $this->news->read_news(2,$region),
+					'video'			=> $this->materials->read_records($region,2),
 					'name'			=> $regname.'<br/>Видео материалы:',
 					'uri_string'	=> ''
 			);
@@ -283,6 +340,7 @@ class Users_interface extends CI_Controller {
 					'unit'			=> array(),
 					'regions'		=> $this->regions->read_records(),
 					'news'			=> $this->news->read_news(2,$region),
+					'camers'		=> $this->materials->read_records($region,3),
 					'name'			=> $regname.'<br/>Веб-камеры на пляжах:',
 					'uri_string'	=> ''
 			);
@@ -386,6 +444,8 @@ class Users_interface extends CI_Controller {
 					'unit'			=> array(),
 					'regions'		=> $this->regions->read_records(),
 					'news'			=> $this->news->read_news(2,0),
+					'slide'			=> $this->materials->read_limit_records($region,5,1),
+					'video'			=> $this->materials->read_limit_records($region,2,2),
 					'zonenews'		=> array(),
 					'name'			=> $regname.'<br/>Новости:',
 					'count'			=> 0,
@@ -500,7 +560,7 @@ class Users_interface extends CI_Controller {
 		$id = $this->uri->segment(3);
 		switch ($section){
 			case 'catalog' 	: $image = $this->catalog->get_image($id); break;
-			case 'unit' 	: $image = $this->images->get_bimage($id); break;
+			case 'material'	: $image = $this->materials->get_image($id); break;
 		}
 		header('Content-type: image/gif');
 		echo $image;

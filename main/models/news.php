@@ -49,6 +49,7 @@ class News extends CI_Model {
 	function read_limit_records($region,$count,$from){
 		
 		$this->db->where('region',$region);
+		$this->db->or_where('region',0);
 		$this->db->limit($count,$from);
 		$this->db->order_by('date DESC');
 		$query = $this->db->get('news');

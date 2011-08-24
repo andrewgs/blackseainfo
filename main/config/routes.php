@@ -34,7 +34,7 @@ $route['reviews/:num'] = "users_interface/reviews";
 $route['read-news/:num'] = "users_interface/read_news";
 
 $route['catalog/viewimage/:num'] = "users_interface/viewimage";
-$route['unit/viewimage/:num'] = "users_interface/viewimage";
+$route['material/viewimage/:num'] = "users_interface/viewimage";
 
 $route['resort/:any']	= "users_interface/zone_content";
 /* -------------------------------------------- ADMIN INTERFACE ---------------------------------------------------------- */

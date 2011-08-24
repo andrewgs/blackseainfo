@@ -59,5 +59,13 @@ class Types extends CI_Model {
 		if(count($data)) return $data[0]['tps_id'];
 		return FALSE;
 	}
+	function type_idexist($id){
+		
+		$this->db->where('tps_id',$id);
+		$query = $this->db->get('types',1);
+		$data = $query->result_array();
+		if(count($data)) return TRUE;
+		return FALSE;
+	}
 }
 ?>

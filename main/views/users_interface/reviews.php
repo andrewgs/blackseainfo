@@ -27,7 +27,6 @@
 					<?=$pages;?>
 				<?php endif;?>
 				</div>
-				<?=$this->load->view('users_interface/sidebar');?>
 			</div>			
 		</div>
 	</div>

@@ -16,7 +16,6 @@
 					<div><?=$content['date'];?></div>
 					<div><?=$content['text'];?></div>
 				</div>
-				<?=$this->load->view('users_interface/sidebar');?>
 			</div>			
 		</div>
 	</div>
