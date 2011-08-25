@@ -65,6 +65,16 @@ class Catalog extends CI_Model {
 		return FALSE;
 	}
 	
+	function read_name($id){
+		
+		$this->db->select('ctl_name');
+		$this->db->where('ctl_id',$id);
+		$query = $this->db->get('catalog');
+		$data = $query->result_array();
+		if(count($data)) return $data[0]['ctl_name'];
+		else NULL;
+	}
+	
 	function get_image($id){
 	
 		$this->db->where('ctl_id',$id);
@@ -73,5 +83,6 @@ class Catalog extends CI_Model {
 		$data = $query->result_array();
 		return $data[0]['ctl_image'];
 	}
+	
 }
 ?>

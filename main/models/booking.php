@@ -3,13 +3,14 @@
 class Booking extends CI_Model {
 	
 	var $id 		= 0;
-	var $title 		= "";
+	var $fio 		= "";
 	var $note		= "";
 	var $date		= "";
 	var $unit_id	= "";
 	var $region_id	= "";
 	var $type_id	= "";
 	var $email		= "";
+	var $phone		= "";
 	
 	function __construct(){
         
@@ -48,15 +49,16 @@ class Booking extends CI_Model {
 		return NULL;
 	}
 
-	function insert_record($unit,$region,$type,$insert){
+	function insert_record($region,$type,$insert){
 		
-		$this->title = $insert['title'];
+		$this->fio = $insert['fio'];
 		$this->note = $insert['note'];
 		$this->date = date("Y-m-d");
-		$this->unit_id = $unit;
+		$this->unit_id = $insert['catalog'];
 		$this->region_id = $region;
 		$this->type_id = $type;
 		$this->email = $insert['email'];
+		$this->phone = $insert['phone'];
 		
 		$this->db->insert('booking',$this);
 	}

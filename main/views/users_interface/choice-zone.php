@@ -19,13 +19,13 @@
 					<?php	
 						switch ($uri_string):
 							case 'resorts-photo' : 
-								echo '<a href="#"><img src="'.$baseurl.'material/viewimage/'.$materials[$i]['id'].'" alt="'.$materials[$i]['title'].'" title="'.$materials[$i]['title'].'"/></a>';
+								echo '<a href="#"><img src="'.$baseurl.'material/viewthumb/'.$materials[$i]['id'].'" alt="'.$materials[$i]['title'].'" title="'.$materials[$i]['title'].'"/></a>';
 								break;
 							case 'video' : 
 								echo '<iframe src="'.$materials[$i]['link'].'" width="210" height="118" frameborder="0"></iframe>'; 
 								break;
 							case 'camers' :
-								echo '<a href="#"><img src="'.$baseurl.'material/viewimage/'.$materials[$i]['id'].'" alt="'.$materials[$i]['title'].'" title="'.$materials[$i]['title'].'"/></a>';
+								echo '<a href="#"><img src="'.$baseurl.'material/viewthumb/'.$materials[$i]['id'].'" alt="'.$materials[$i]['title'].'" title="'.$materials[$i]['title'].'"/></a>';
 								break;
 						endswitch;
 					?>	

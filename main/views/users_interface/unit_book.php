@@ -12,12 +12,10 @@
 		<div id="content">
 			<div id="information" class="white-texture rounded clearfix">
 				<div class="list-main">
-			<?php if(count($unit)): ?>
 				<h2 class="font-replace"><?=$name;?></h2>
 				<div class="advertisment clearfix">
 				<?=$this->load->view('users_interface/book-form');?>
 				</div>
-			<?php endif; ?>
 				</div>
 				<?=$this->load->view('users_interface/sidebar');?>
 			</div>			
@@ -33,13 +31,17 @@
 			var err = false;
 			 $(".inpvalue").css('border-color','#D0D0D0');
 			 $("#error-msg").text('');
-			if($("#unit-title").val() == ''){
+			if($("#cust-fio").val() == ''){
 				err = true;
-				$("#unit-title").css('border-color','#ff0000');
+				$("#cust-fio").css('border-color','#ff0000');
 			}
 			if($("#cust-email").val() == ''){
 				err = true;
 				$("#cust-email").css('border-color','#ff0000');
+			}
+			if($("#cust-phone").val() == ''){
+				err = true;
+				$("#cust-phone").css('border-color','#ff0000');
 			}
 			if($("#cust-info").val() == ''){
 				err = true;

@@ -30,7 +30,7 @@ class Regions extends CI_Model {
 		$this->db->where('reg_id',$id);
 		$query = $this->db->get('regions');
 		$data = $query->result_array();
-		if(count($data)) return $data[0]['reg_name'].', '.$data[0]['reg_district'];
+		if(count($data)) return $data[0]['reg_district'].', '.$data[0]['reg_name'];
 		else NULL;
 	}
 	

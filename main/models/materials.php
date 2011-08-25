@@ -54,5 +54,14 @@ class Materials extends CI_Model {
 		$data = $query->result_array();
 		return $data[0]['image'];
 	}
+	
+	function get_thumb($id){
+	
+		$this->db->where('id',$id);
+		$this->db->select('thumb');
+		$query = $this->db->get('materials');
+		$data = $query->result_array();
+		return $data[0]['thumb'];
+	}
 }
 ?>
