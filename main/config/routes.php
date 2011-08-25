@@ -42,5 +42,13 @@ $route['photo/viewthumb/:num'] = "users_interface/viewthumb";
 
 $route['resort/:any']	= "users_interface/zone_content";
 /* -------------------------------------------- ADMIN INTERFACE ---------------------------------------------------------- */
-$route['profile'] = "admin_interface/profile";
-$route['shutdown'] = "admin_interface/shutdown";
+
+$route['admin/booking'] = "admin_interface/booking";
+$route['admin/booking/:num'] = "admin_interface/booking";
+$route['admin/profile'] = "admin_interface/profile";
+$route['admin/logout'] = "admin_interface/logout";
+
+$route['admin/delete-book/:num'] = "admin_interface/delete_book";
+$route['admin/:any/delete-book/:num'] = "admin_interface/delete_zone_book";
+$route['admin/:any/booking'] = "admin_interface/zone_booking";
+$route['admin/:any/booking/:num'] = "admin_interface/zone_booking";

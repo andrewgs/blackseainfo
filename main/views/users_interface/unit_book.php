@@ -12,10 +12,10 @@
 		<div id="content">
 			<div id="information" class="white-texture rounded clearfix">
 				<div class="list-main">
-				<h2 class="font-replace"><?=$name;?></h2>
-				<div class="advertisment clearfix">
-				<?=$this->load->view('users_interface/book-form');?>
-				</div>
+					<h2 class="font-replace"><?=$name;?></h2>
+					<div class="advertisment clearfix">
+					<?=$this->load->view('users_interface/book-form');?>
+					</div>
 				</div>
 				<?=$this->load->view('users_interface/sidebar');?>
 			</div>			

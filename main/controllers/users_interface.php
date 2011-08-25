@@ -1,7 +1,7 @@
 <?php
 class Users_interface extends CI_Controller {
 
-	var $user = array('uid'=>0,'uname'=>'','ulogin'=>'','upassword'=>'','uemail'=>'','status'=>FALSE);
+	var $user = array('uid'=>0,'uname'=>'','upassword'=>'','uemail'=>'','status'=>FALSE);
 	var $months = array("01"=>"января","02"=>"февраля","03"=>"марта","04"=>"апреля",
 						"05"=>"мая","06"=>"июня","07"=>"июля","08"=>"августа",
 						"09"=>"сентября","10"=>"октября","11"=>"ноября","12"=>"декабря");
@@ -9,7 +9,6 @@ class Users_interface extends CI_Controller {
 	function __construct(){
 	
 		parent::__construct();
-		
 		$this->load->model('users');
 		$this->load->model('regions');
 		$this->load->model('types');
@@ -24,17 +23,16 @@ class Users_interface extends CI_Controller {
 		if(isset($cookieuid) and !empty($cookieuid)):
 			$this->user['uid'] = $this->session->userdata('userid');
 			if($this->user['uid']):
-				$userinfo = $this->usermodel->read_info($this->user['uid']);
+				$userinfo = $this->users->read_info($this->user['uid']);
 				if($userinfo):
 					$this->user['uname']	 = $userinfo['uname'];
-					$this->user['ulogin'] 	 = $userinfo['ulogin'];
 					$this->user['upassword'] = $userinfo['upassword'];
 					$this->user['uemail'] 	 = $userinfo['uemail'];
 					$this->user['status'] 	 = TRUE;
 				endif;
 			endif;
 			
-			if($this->session->userdata('login_id') != md5($this->user['ulogin'].$this->user['upassword'])):
+			if($this->session->userdata('login_id') != md5($this->user['uemail'].$this->user['upassword'])):
 				$this->user['status'] = FALSE;
 				$this->user = array();
 			endif;
@@ -534,6 +532,40 @@ class Users_interface extends CI_Controller {
 		$this->load->view('users_interface/project',$pagevar);
 	}
 	
+	function admin_login(){
+		
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Авторизация",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'uri_string'	=> ''
+			);
+		if($this->user['status']):
+			redirect('');
+		endif;
+		if($this->input->post('submit')):
+			$this->form_validation->set_rules('login','','required|trim');
+			$this->form_validation->set_rules('pass','','required|trim');
+			if(!$this->form_validation->run()):
+				$_POST['submit'] = NULL;
+				$this->admin_login();
+				return FALSE;
+			else:
+				$_POST['submit'] = NULL;
+				$user = $this->users->auth_user($_POST['login'],$_POST['pass']);
+				if($user):
+					$this->session->set_userdata('login_id',md5($user['uemail'].$user['upassword']));
+					$this->session->set_userdata('userid',$user['uid']);
+					redirect('');
+				endif;
+			endif;
+		endif;
+		$this->load->view('users_interface/admin-login',$pagevar);
+	}
+
 	/*********************************************************************************************************************/
 	
 	function email_check($email){
@@ -542,43 +574,6 @@ class Users_interface extends CI_Controller {
 			$this->form_validation->set_message('email_check','E-mail существует');
 			return FALSE;
 		endif;
-	}
-	
-	function admin_login(){
-	
-		$pagevar = array(
-					'description'	=> '',
-					'author'		=> '',
-					'title'			=> 'LoveSonnet.ru - Авторизация',
-					'baseurl' 		=> base_url(),
-					'menu'			=> FALSE,
-					'position'		=> '',
-					'error'			=> FALSE,
-					'userinfo'		=> $this->user
-			);
-		if($this->user['status']):
-			redirect('');
-		endif;
-		if($this->input->post('submit')):
-			$this->form_validation->set_rules('login-name','"Логин"','required|trim');
-			$this->form_validation->set_rules('login-pass','"Пароль"','required');
-			$this->form_validation->set_error_delimiters('<div class="fvalid_error">','</div>');
-			if(!$this->form_validation->run()):
-				$_POST['submit'] = NULL;
-				$this->admin_login();
-				return FALSE;
-			else:
-				$_POST['submit'] = NULL;
-				$user = $this->usermodel->auth_user($_POST['login-name'],$_POST['login-pass']);
-				if($user):
-					$this->session->set_userdata('login_id',md5($user['ulogin'].$user['upassword']));
-					$this->session->set_userdata('userid',$user['uid']);
-					redirect('');
-				endif;
-				$pagevar['error'] = TRUE;
-			endif;
-		endif;
-		$this->load->view('users_interface/admin-login',$pagevar);
 	}
 	
 	function viewimage(){

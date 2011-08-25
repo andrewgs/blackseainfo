@@ -6,6 +6,9 @@
 			<li><?=anchor('project','Участие в проекте');?></li>
 			<li><?=anchor('news','Новостная лента');?></li>
 			<li><?=anchor('contacts','Контакты');?></li>
+		<?php if($userinfo['status']):?>
+			<li><?=anchor('logout','Завершить сеанс');?></li>
+		<?php endif; ?>
 		</ul>
 	</nav>
 	<div class="top-phone">

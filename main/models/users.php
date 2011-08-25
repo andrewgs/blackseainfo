@@ -2,11 +2,10 @@
 class Users extends CI_Model {
 
 	var $uid 			= 0;	/* идентификатор пользователя*/
-	var $ulogin 		= '';	/* логин пользователя*/
+	var $uemail 		= '';	/* логин пользователя*/
 	var $upassword 		= '';	/* пароль пользователя*/
 	var $uname 			= '';	/* имя пользователя*/
-	var $uphoto 		= '';	/* фото пользователя*/
-	var $usphoto 		= '';	/* фото пользователя*/
+	var $ucryptpassword	= '';	
 	
 	function __construct(){
     
@@ -24,7 +23,7 @@ class Users extends CI_Model {
 	
 	function read_info($id){
 		
-		$this->db->select('uid,ulogin,upassword,uname,uemail');
+		$this->db->select('uid,upassword,uname,uemail');
 		$this->db->where('uid',$id);
 		$query = $this->db->get('users');
 		$data = $query->result_array();
@@ -44,8 +43,9 @@ class Users extends CI_Model {
 		
 		$this->db->where('uid',$uid);
 		$this->db->set('uname',$data['name']);
-		$this->db->set('uemail',$data['email']);
-		$this->db->set('upassword',md5($data['newpass']));
+		$this->db->set('uemail',$data['login']);
+		$this->db->set('upassword',$data['newpass']);
+		$this->db->set('ucryptpassword',$this->encrypt->encode($data['newpass']));
 		$this->db->update('users');
 		return $this->db->affected_rows();
 	}

@@ -19,6 +19,8 @@ class Booking extends CI_Model {
 	
 	function read_records(){
 		
+		$this->db->order_by('date DESC');
+		$this->db->order_by('id DESC');
 		$query = $this->db->get('booking');
 		return $query->result_array();
 	}
@@ -39,9 +41,20 @@ class Booking extends CI_Model {
 		return $data[0]['cnt'];
 	}
 	
+	function count_region_records($region){
+		
+		$this->db->select('count(*) as cnt');
+		$this->db->where('region_id',$region);
+		$this->db->order_by('id DESC');
+		$query = $this->db->get('booking');
+		$data = $query->result_array();
+		return $data[0]['cnt'];
+	}
+	
 	function read_limit_records($count,$from){
 		
 		$this->db->limit($count,$from);
+		$this->db->order_by('date DESC');
 		$this->db->order_by('id DESC');
 		$query = $this->db->get('booking');
 		$data = $query->result_array();
@@ -61,6 +74,12 @@ class Booking extends CI_Model {
 		$this->phone = $insert['phone'];
 		
 		$this->db->insert('booking',$this);
+	}
+	
+	function delete_record($id){
+	
+		$this->db->where('id',$id);
+		$this->db->delete('booking');
 	}
 }
 ?>

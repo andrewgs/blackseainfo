@@ -24,6 +24,16 @@
 				<li><?=anchor('map-of-sochi','Карта города Сочи');?></li>
 			</ul>
 		</div>
+	<?php if($userinfo['status']):?>
+		<div class="column">
+			<h3>Админ-панель</h3>
+			<ul>
+				<li><?=anchor('admin/booking','Заявки');?></li>
+				<li><?=anchor('admin/profile','Профиль');?></li>
+				<li><?=anchor('admin/logout','Завершить сеанс');?></li>
+			</ul>
+		</div>
+	<?php endif; ?>
 		<div class="column last">
 			<h3>Наши услуги</h3>
 			<ul>

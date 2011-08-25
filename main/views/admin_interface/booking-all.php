@@ -8,16 +8,26 @@
 <div id="container">
 	<?=$this->load->view('users_interface/header');?>
 	<div id="main" role="main" class="clearfix">
-		<?=$this->load->view('users_interface/regions');?>
+		<?=$this->load->view('admin_interface/regions');?>
 		<div id="content">
 			<div id="information" class="white-texture rounded clearfix">
 				<div class="list-main">
-			<?php if(count($reviews)): ?>
-					<h2 class="font-replace"><?=$name;?></h2>
-				<?php for($i=0;$i<count($reviews);$i++): ?>
+			<?php if(count($books)): ?>
+					<h2 class="font-replace"><img src="<?=$baseurl;?>images/left-arrow.png"/><?=$name;?></h2>
+					<hr/>
+				<?php for($i=0;$i<count($books);$i++): ?>
 					<div class="comment">
-						<div class=""><?=$reviews[$i]['rew_note'];?></div>
-						<div class=""><?=$reviews[$i]['rew_author'];?></div>
+					<?php $uri_zone = 'resort/'.$books[$i]['reg_alias'];?>
+						<div class=""><?=$books[$i]['date'];?></div>
+						<div class=""><?=$books[$i]['fio'];?></div>
+						<div class=""><?=$books[$i]['email'];?></div>
+						<div class=""><?=$books[$i]['phone'];?></div>
+					<div class=""><?=anchor($uri_zone,$books[$i]['reg_district'].', '.$books[$i]['reg_name']);?></div>
+					<div class=""><?=anchor($uri_zone.'/'.$books[$i]['ctl_alias'].'/information',$books[$i]['ctl_name']);?></div>
+					<img src="<?=$baseurl;?>catalog/viewimage/<?=$books[$i]['ctl_id'];?>" alt="<?=$books[$i]['ctl_name'];?>" title="<?=$books[$i]['ctl_name'];?>"/>
+						<div class=""><?=$books[$i]['note'];?></div>
+						<?=anchor('admin/delete-book/'.$books[$i]['id'],'Удалить заявку');?>
+						<hr/>
 					</div>
 				<?php endfor;?>
 				<?php if($pages): ?>
