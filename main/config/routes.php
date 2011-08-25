@@ -24,6 +24,7 @@ $route['resorts-photo'] = "users_interface/choice_zone";
 $route['video'] = "users_interface/choice_zone";
 $route['camers'] = "users_interface/choice_zone";
 $route['news'] = "users_interface/choice_zone";
+$route['project'] = "users_interface/project";
 
 $route['weather'] = "users_interface/weather";
 $route['payment'] = "users_interface/payment";

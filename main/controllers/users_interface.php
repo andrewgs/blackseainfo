@@ -518,6 +518,21 @@ class Users_interface extends CI_Controller {
 			show_404();
 		endif;
 	}
+
+	function project(){
+	
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Участие в проекте",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'news'			=> $this->news->read_news(2,0),
+					'uri_string'	=> ''
+			);
+		$this->load->view('users_interface/project',$pagevar);
+	}
 	
 	/*********************************************************************************************************************/
 	

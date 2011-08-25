@@ -3,7 +3,7 @@
 	<nav id="main-nav">
 		<ul>
 			<li><?=anchor('','Главная');?></li>
-			<li><?=anchor('#','Участие в проекте');?></li>
+			<li><?=anchor('project','Участие в проекте');?></li>
 			<li><?=anchor('news','Новостная лента');?></li>
 			<li><?=anchor('contacts','Контакты');?></li>
 		</ul>
