@@ -173,12 +173,100 @@ class Admin_interface extends CI_Controller {
 		$this->booking->delete_record($this->uri->segment(4));
 		redirect('admin/'.$this->uri->segment(2).'/booking');
 	}
+	
 	function delete_book(){
 		
 		$this->booking->delete_record($this->uri->segment(3));
 		redirect('admin/booking');
 	}
 	
+	function manager_region(){
+		
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Управление зонами отдыха",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'name'			=> "Список зон отдыха",
+					'uri_string'	=> ''
+			);
+			
+		if($this->input->post('submit')):
+			$this->form_validation->set_rules('name','','required|htmlspecialchars|strip_tags|trim');
+			$this->form_validation->set_rules('area','','trim');
+			$this->form_validation->set_rules('district','','required|trim');
+			$this->form_validation->set_rules('alias','','required|trim|callback_region_alias');
+			$this->form_validation->set_rules('priority','','required|trim');
+			if(!$this->form_validation->run()):
+				$_POST['submit'] = NULL;
+				$this->manager_region();
+				return FALSE;
+			else:
+				$_POST['submit'] = NULL;
+				$this->regions->insert_record($_POST);
+				redirect($this->uri->uri_string());
+			endif;
+		endif;
+		
+		$this->load->view('admin_interface/manager-region',$pagevar);
+	}
+
+	function save_region(){
+	
+		$statusval = array('status'=>FALSE,'alias'=>FALSE,'message'=>'Данные не изменились','name'=>'','area'=>'','distr'=>'','alias'=>'','priority'=>'');
+		$rid = $this->input->post('id');
+		$name = trim($this->input->post('name'));
+		$area = trim($this->input->post('area'));
+		$distr = trim($this->input->post('distr'));
+		$alias = trim($this->input->post('alias'));
+		$priority = trim($this->input->post('priority'));
+		if(!$rid || !$name || !$distr || !$alias || !$priority) show_404();
+		if(!$area) $area = '';
+		
+		$region = $this->regions->region_exist($alias);
+		if($region && ($region != $rid)):
+			$statusval['status'] = FALSE;
+			$statusval['alias'] = TRUE;
+			$statusval['message'] = 'Псевдоним уже существует';
+		else:
+			$success = $this->regions->save_region($rid,$name,$area,$distr,$alias,$priority);
+			if($success):
+				$statusval['status'] = TRUE;
+				$statusval['name'] = $name;
+				$statusval['area'] = $area;
+				$statusval['distr'] = $distr;
+				$statusval['alias'] = $alias;
+				$statusval['priority'] = $priority;
+			endif;
+		endif;
+		echo json_encode($statusval);
+	}
+	
+	function valid_region_alias(){
+	
+		$statusval = array('status'=>FALSE,'message'=>'Псевдоним уже существует');
+		$alias = trim($this->input->post('alias'));
+		if(!$alias) show_404();
+		$success = $this->regions->region_exist($alias);
+		if(!$success):
+			$statusval['status'] = TRUE;
+			$statusval['message'] = 'Псевдоним свободен';
+		endif;
+		echo json_encode($statusval);
+	}
+	
+	/*********************************************************************************************************************/
+	
+	function region_alias($alias){
+		if($this->regions->region_exist($alias)):
+			$this->form_validation->set_message('region_alias','Псевдоним уже существует');
+			return FALSE;
+		endif;
+		return TRUE;
+	}
+		
 	/*********************************************************************************************************************/
 	
 	function operation_date($field){

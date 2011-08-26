@@ -43,21 +43,24 @@ class Regions extends CI_Model {
 		return NULL;
 	}
 	
-	
 	function insert_record($insertdata){
 			
 		$this->reg_name 	= $insertdata['name'];
 		$this->reg_area		= $insertdata['area'];
 		$this->reg_district	= $insertdata['district'];
+		$this->reg_priority	= $insertdata['priority'];
+		$this->reg_alias	= $insertdata['alias'];
 		$this->db->insert('regions',$this);
 		return $this->db->insert_id();
 	}
 
-	function save_region($id,$name,$area,$dictr){
+	function save_region($id,$name,$area,$dictr,$alias,$priority){
 	
 		$this->db->set('reg_name',$name);
 		$this->db->set('reg_area',$area);
 		$this->db->set('reg_district',$dictr);
+		$this->db->set('reg_alias',$alias);
+		$this->db->set('reg_priority',$priority);
 		$this->db->where('reg_id',$id);
 		$this->db->update('regions');
 		return $this->db->affected_rows();

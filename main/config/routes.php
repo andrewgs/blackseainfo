@@ -47,6 +47,9 @@ $route['admin/booking'] = "admin_interface/booking";
 $route['admin/booking/:num'] = "admin_interface/booking";
 $route['admin/profile'] = "admin_interface/profile";
 $route['admin/logout'] = "admin_interface/logout";
+$route['admin/manager/regions'] = "admin_interface/manager_region";
+$route['admin/manager/regions/save'] = "admin_interface/save_region";
+$route['admin/manager/regions/valid-alias'] = "admin_interface/valid_region_alias";
 
 $route['admin/delete-book/:num'] = "admin_interface/delete_book";
 $route['admin/:any/delete-book/:num'] = "admin_interface/delete_zone_book";
