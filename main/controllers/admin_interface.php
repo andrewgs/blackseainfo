@@ -16,6 +16,7 @@ class Admin_interface extends CI_Controller {
 		$this->load->model('regions');
 		$this->load->model('booking');
 		$this->load->model('union');
+		$this->load->model('news');
 		$cookieuid = $this->session->userdata('login_id');
 		if(isset($cookieuid) and !empty($cookieuid)):
 			$this->user['uid'] = $this->session->userdata('userid');
@@ -104,7 +105,6 @@ class Admin_interface extends CI_Controller {
 					'pages'			=> '',
 					'uri_string'	=> 'booking'
 			);
-			
 		$pagevar['count'] = $this->booking->count_records();
 		
 		$config['base_url'] 		= $pagevar['baseurl'].'admin/booking/';
@@ -257,6 +257,237 @@ class Admin_interface extends CI_Controller {
 		echo json_encode($statusval);
 	}
 	
+	function choice_zone(){
+	
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Выбор зоны отдыха",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'name'			=> "Выберите зону отдыха",
+					'uri_string'	=> 'manager'
+			);
+			
+		$this->load->view('admin_interface/choice-zone',$pagevar);
+	}
+	
+	function manager_zone(){
+		
+		$region = $this->regions->region_exist($this->uri->segment(2));
+		if(!$region) show_404();
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Управление зоной отдыха",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'name'			=> $this->regions->read_city($region).'<br/>Управление:',
+					'uri_string'	=> ''
+			);
+			
+		$this->load->view('admin_interface/manager-zone',$pagevar);
+	}
+	
+	function manager_news(){
+	
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Управление новостями",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'name'			=> "Выберите зону отдыха",
+					'news'			=> array(),
+					'count'			=> 0,
+					'pages'			=> '',
+					'uri_string'	=> 'news'
+			);
+		
+		$pagevar['count'] = $this->news->count_records(0);
+		
+		$config['base_url'] 		= $pagevar['baseurl'].'admin/manager/news';
+        $config['total_rows'] 		= $pagevar['count']; 
+        $config['per_page'] 		= 5;
+        $config['num_links'] 		= 4;
+        $config['uri_segment'] 		= 4;
+		$config['first_link']		= 'В начало';
+		$config['last_link'] 		= 'В конец';
+		$config['next_link'] 		= 'Далее &raquo;';
+		$config['prev_link'] 		= '&laquo; Назад';
+		$config['cur_tag_open']		= '<b>';
+		$config['cur_tag_close'] 	= '</b>';
+		$from = intval($this->uri->segment(4));
+		$pagevar['news'] = $this->news->read_limit_records(0,5,$from);
+		for($i=0;$i<count($pagevar['news']);$i++):
+			$pagevar['news'][$i]['date'] = $this->operation_date($pagevar['news'][$i]['date']);
+		endfor;
+		$this->session->set_userdata('uripath',$this->uri->uri_string());
+		$this->pagination->initialize($config);
+		$pagevar['pages'] = $this->pagination->create_links();
+		
+		$this->load->view('admin_interface/manager-news',$pagevar);
+	}
+
+	function manager_zone_news(){
+		
+		$region = $this->regions->region_exist($this->uri->segment(2));
+		if(!$region) show_404();
+		$regname = $this->regions->read_city($region);
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Управление новостями",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'name'			=> $regname.'<br/>Новости:',
+					'news'			=> array(),
+					'count'			=> 0,
+					'pages'			=> '',
+					'uri_string'	=> 'news'
+			);
+		
+		$pagevar['count'] = $this->news->count_records($region);
+		
+		$config['base_url'] 		= $pagevar['baseurl'].'admin/'.$this->uri->segment(2).'/news';
+        $config['total_rows'] 		= $pagevar['count']; 
+        $config['per_page'] 		= 5;
+        $config['num_links'] 		= 4;
+        $config['uri_segment'] 		= 4;
+		$config['first_link']		= 'В начало';
+		$config['last_link'] 		= 'В конец';
+		$config['next_link'] 		= 'Далее &raquo;';
+		$config['prev_link'] 		= '&laquo; Назад';
+		$config['cur_tag_open']		= '<b>';
+		$config['cur_tag_close'] 	= '</b>';
+		$from = intval($this->uri->segment(4));
+		$pagevar['news'] = $this->news->read_limit_zone($region,5,$from);
+		for($i=0;$i<count($pagevar['news']);$i++):
+			$pagevar['news'][$i]['date'] = $this->operation_date($pagevar['news'][$i]['date']);
+		endfor;
+		$this->session->set_userdata('uripath',$this->uri->uri_string());
+		$this->pagination->initialize($config);
+		$pagevar['pages'] = $this->pagination->create_links();
+		
+		$this->load->view('admin_interface/manager-zone-news',$pagevar);
+	}
+	
+	function view_news(){
+	
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Просмотр новости",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'name'			=> anchor($this->session->userdata('uripath'),'Вернуться к списку'),
+					'news'			=> $this->news->read_record($this->uri->segment(4)),
+					'uri_string'	=> 'news'
+			);
+		$this->load->view('admin_interface/view-news',$pagevar);
+	}
+	
+	function add_news(){
+		
+		$segment = $this->uri->segment(2);
+		if($segment != 'manager'):
+			$region = $this->regions->region_exist($segment);
+			if(!$region): 
+				show_404(); 
+			endif;
+		else:
+			$region = 0;
+		endif;
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Добавление новости",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'name'			=> anchor($this->session->userdata('uripath'),'Вернуться назад'),
+					'uri_string'	=> 'news'
+			);
+		
+		if($this->input->post('submit')):
+			$this->form_validation->set_rules('title','','required|htmlspecialchars|strip_tags|trim');
+			$this->form_validation->set_rules('date','','required|trim');
+			$this->form_validation->set_rules('text','','required|strip_tags|trim');
+			if(!$this->form_validation->run()):
+				$_POST['submit'] = NULL;
+				$this->add_news();
+				return FALSE;
+			else:
+				$_POST['submit'] = NULL;
+				$pattern = "/(\d+)\/(\w+)\/(\d+)/i";
+				$replacement = "\$3-\$2-\$1";
+				$_POST['date'] = preg_replace($pattern,$replacement,$_POST['date']);
+				$_POST['region'] = $region;
+				$news = $this->news->insert_record($_POST);
+				redirect('admin/manager/view-news/'.$news);
+			endif;
+		endif;
+		
+		$this->load->view('admin_interface/add-news',$pagevar);
+	}
+	
+	function edit_news(){
+		
+		$newsid = $this->uri->segment(4);
+		$segment = $this->uri->segment(2);
+		if($segment != 'manager'):
+			$region = $this->regions->region_exist($segment);
+			if(!$region): 
+				show_404(); 
+			endif;
+		else:
+			$region = 0;
+		endif;
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Редактирование новости",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'name'			=> anchor($this->session->userdata('uripath'),'Вернуться назад'),
+					'news'			=> $this->news->read_record($newsid),
+					'uri_string'	=> 'news'
+			);
+		
+		if($this->input->post('submit')):
+			$this->form_validation->set_rules('title','','required|htmlspecialchars|strip_tags|trim');
+			$this->form_validation->set_rules('date','','required|trim');
+			$this->form_validation->set_rules('text','','required|strip_tags|trim');
+			if(!$this->form_validation->run()):
+				$_POST['submit'] = NULL;
+				$this->edit_news();
+				return FALSE;
+			else:
+				$_POST['submit'] = NULL;
+				$pattern = "/(\d+)\/(\w+)\/(\d+)/i";
+				$replacement = "\$3-\$2-\$1";
+				$_POST['date'] = preg_replace($pattern,$replacement,$_POST['date']);
+				$_POST['region'] = $region;
+				$this->news->update_record($newsid,$_POST);
+				redirect('admin/manager/view-news/'.$newsid);
+			endif;
+		endif;
+		$pagevar['news']['date'] = $this->operation_date_slash($pagevar['news']['date']);
+		$this->load->view('admin_interface/edit-news',$pagevar);
+	}
+	
+	function delete_news(){
+	
+		$this->news->delete_record($this->uri->segment(4));
+		redirect($this->session->userdata('uripath'));
+	}
+
 	/*********************************************************************************************************************/
 	
 	function region_alias($alias){

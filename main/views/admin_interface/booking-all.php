@@ -37,6 +37,9 @@
 					<h2 class="font-replace">Информация отсутствует</h2>
 			<?php endif; ?>
 				</div>
+				<div class="list-sidebar">
+				<?=$this->load->view('admin_interface/sidebar-menu');?>
+				</div>
 			</div>			
 		</div>
 	</div>

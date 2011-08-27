@@ -64,6 +64,9 @@
 					<img src="<?=$baseurl;?>images/buttons/news-plus.png"><font size="3"> Добавить</font>
 				</button>
 				</div>
+				<div class="list-sidebar">
+				<?=$this->load->view('admin_interface/sidebar-menu');?>
+				</div>
 			</div>			
 		</div>
 	</div>

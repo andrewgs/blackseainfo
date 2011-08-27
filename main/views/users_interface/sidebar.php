@@ -1,4 +1,7 @@
 <div class="list-sidebar">
+<?php if($userinfo['status']):?>
+	<?=$this->load->view('admin_interface/sidebar-menu');?>
+<?php endif; ?>
 <?php if(isset($subtype)): ?>	
 	<h2 class="font-replace">Подразделы</h2>
 	<div id="subtype" class="widget clearfix">

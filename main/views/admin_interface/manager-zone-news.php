@@ -12,30 +12,26 @@
 		<div id="content">
 			<div id="information" class="white-texture rounded clearfix">
 				<div class="list-main">
-					<h2 class="font-replace"><img src="<?=$baseurl;?>images/left-arrow.png"/><?=$name;?></h2>
-					<h2 class="font-replace"><?=$zone;?></h2>
-					<hr/>
-			<?php if(count($books)): ?>
-				<?php for($i=0;$i<count($books);$i++): ?>
+					<h2 class="font-replace"><?=$name;?></h2>
+					<?=anchor('admin/'.$this->uri->segment(2).'/add-news','Добавить новость');?>
+				<?php if(count($news)): ?>
+					<?php for($i=0;$i<count($news);$i++): ?>
 					<div class="comment">
-					<?php $uri_zone = 'resort/'.$books[$i]['reg_alias'];?>
-						<div class=""><?=$books[$i]['date'];?></div>
-						<div class=""><?=$books[$i]['fio'];?></div>
-						<div class=""><?=$books[$i]['email'];?></div>
-						<div class=""><?=$books[$i]['phone'];?></div>
-					<div class=""><?=anchor($uri_zone.'/'.$books[$i]['ctl_alias'].'/information',$books[$i]['ctl_name']);?></div>
-					<img src="<?=$baseurl;?>catalog/viewimage/<?=$books[$i]['ctl_id'];?>" alt="<?=$books[$i]['ctl_name'];?>" title="<?=$books[$i]['ctl_name'];?>"/>
-						<div class=""><?=$books[$i]['note'];?></div>
-						<?=anchor('admin/'.$books[$i]['reg_alias'].'/delete-book/'.$books[$i]['id'],'Удалить заявку');?>
-						<hr/>
+						<div class=""><?=$news[$i]['date'];?></div>
+						<div class=""><?=$news[$i]['title'];?></div>
+						<div class=""><?=$news[$i]['text'];?></div>
 					</div>
-				<?php endfor;?>
-				<?php if($pages): ?>
-					<?=$pages;?>
-				<?php endif;?>
-			<?php else: ?>
+					<div class="">
+						<?=anchor('admin/'.$this->uri->segment(2).'/edit-news/'.$news[$i]['id'],'Редактировать');?>
+						<?=anchor('admin/'.$this->uri->segment(2).'/delete-news/'.$news[$i]['id'],'Удалить');?>
+					</div>
+					<?php endfor;?>
+				<?php else: ?>
 					<h2 class="font-replace">Информация отсутствует</h2>
-			<?php endif; ?>
+				<?php endif; ?>
+					<?php if($pages): ?>
+						<?=$pages;?>
+					<?php endif;?>
 				</div>
 				<div class="list-sidebar">
 				<?=$this->load->view('admin_interface/sidebar-menu');?>

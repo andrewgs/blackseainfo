@@ -478,6 +478,9 @@ class Users_interface extends CI_Controller {
 		$config['cur_tag_close'] 	= '</b>';
 		$from = intval($this->uri->segment(4));
 		$pagevar['zonenews'] = $this->news->read_limit_records($region,5,$from);
+		for($i=0;$i<count($pagevar['zonenews']);$i++):
+			$pagevar['zonenews'][$i]['date'] = $this->operation_date($pagevar['zonenews'][$i]['date']);
+		endfor;
 		$this->pagination->initialize($config);
 		$pagevar['pages'] = $this->pagination->create_links();
 		

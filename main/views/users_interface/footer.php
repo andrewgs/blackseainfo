@@ -29,7 +29,9 @@
 			<h3>Админ-панель</h3>
 			<ul>
 				<li><?=anchor('admin/booking','Заявки');?></li>
-				<li><?=anchor('admin/manager/regions','Зоны отдыха');?></li>
+				<li><?=anchor('admin/manager/catalog','Каталог');?></li>
+				<li><?=anchor('admin/manager/news','Новости');?></li>
+				<li><?=anchor('admin/manager/regions','Список зон');?></li>
 				<li><?=anchor('admin/profile','Профиль');?></li>
 				<li><?=anchor('admin/logout','Завершить сеанс');?></li>
 			</ul>

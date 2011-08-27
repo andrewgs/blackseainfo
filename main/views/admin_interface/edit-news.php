@@ -13,29 +13,8 @@
 			<div id="information" class="white-texture rounded clearfix">
 				<div class="list-main">
 					<h2 class="font-replace"><img src="<?=$baseurl;?>images/left-arrow.png"/><?=$name;?></h2>
-					<h2 class="font-replace"><?=$zone;?></h2>
-					<hr/>
-			<?php if(count($books)): ?>
-				<?php for($i=0;$i<count($books);$i++): ?>
-					<div class="comment">
-					<?php $uri_zone = 'resort/'.$books[$i]['reg_alias'];?>
-						<div class=""><?=$books[$i]['date'];?></div>
-						<div class=""><?=$books[$i]['fio'];?></div>
-						<div class=""><?=$books[$i]['email'];?></div>
-						<div class=""><?=$books[$i]['phone'];?></div>
-					<div class=""><?=anchor($uri_zone.'/'.$books[$i]['ctl_alias'].'/information',$books[$i]['ctl_name']);?></div>
-					<img src="<?=$baseurl;?>catalog/viewimage/<?=$books[$i]['ctl_id'];?>" alt="<?=$books[$i]['ctl_name'];?>" title="<?=$books[$i]['ctl_name'];?>"/>
-						<div class=""><?=$books[$i]['note'];?></div>
-						<?=anchor('admin/'.$books[$i]['reg_alias'].'/delete-book/'.$books[$i]['id'],'Удалить заявку');?>
-						<hr/>
-					</div>
-				<?php endfor;?>
-				<?php if($pages): ?>
-					<?=$pages;?>
-				<?php endif;?>
-			<?php else: ?>
-					<h2 class="font-replace">Информация отсутствует</h2>
-			<?php endif; ?>
+					<h2 class="font-replace">Добавление новости</h2>
+					<?=$this->load->view('admin_interface/edit-news-form');?>
 				</div>
 				<div class="list-sidebar">
 				<?=$this->load->view('admin_interface/sidebar-menu');?>
@@ -46,9 +25,31 @@
 	<?=$this->load->view('users_interface/footer');?>
 </div> <!--! end of #container -->
 <?=$this->load->view('users_interface/scripts');?>
+<script type="text/javascript" src="<?=$baseurl;?>js/jquery.blockUI.js"></script>
+<?=$this->load->view('admin_interface/datepacker');?>
 <!--[if lt IE 7 ]>
 	<script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
 	<script>window.attachEvent("onload",function(){CFInstall.check({mode:"overlay"})})</script>
 <![endif]-->
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#addItem").click(function(event){
+			var err = false;
+			 $("#reserve-form .inpvalue").css('border-color','#D0D0D0');
+			if($("#title").val() == ''){err = true;$("#title").css('border-color','#ff0000');}
+			if($("#date").val() == ''){err = true;$("#date").css('border-color','#ff0000');}
+			if($("#text").val() == ''){err = true;$("#text").css('border-color','#ff0000');}
+			if(err){event.preventDefault();msgerror('Пропущены обязательные поля');}
+		});
+		function msgerror(msg){
+			$.blockUI({
+				message: msg,
+				css:{border:'none',padding:'15px', size:'12.0pt',backgroundColor:'#000',color:'#fff',opacity:'.8','-webkit-border-radius': '10px','-moz-border-radius': '10px'}
+			});
+			window.setTimeout($.unblockUI,1000);
+			return false;
+		}
+	});
+</script>
 </body>
 </html>

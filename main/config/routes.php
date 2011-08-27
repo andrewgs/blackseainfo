@@ -50,6 +50,22 @@ $route['admin/logout'] = "admin_interface/logout";
 $route['admin/manager/regions'] = "admin_interface/manager_region";
 $route['admin/manager/regions/save'] = "admin_interface/save_region";
 $route['admin/manager/regions/valid-alias'] = "admin_interface/valid_region_alias";
+$route['admin/manager/catalog'] = "admin_interface/choice_zone";
+$route['admin/manager/news'] = "admin_interface/manager_news";
+$route['admin/manager/news/:num'] = "admin_interface/manager_news";
+$route['admin/:any/manager'] = "admin_interface/manager_zone";
+$route['admin/:any/news'] = "admin_interface/manager_zone_news";
+$route['admin/:any/news/:num'] = "admin_interface/manager_zone_news";
+
+$route['admin/manager/add-news'] = "admin_interface/add_news";
+$route['admin/manager/view-news/:num'] = "admin_interface/view_news";
+$route['admin/manager/edit-news/:num'] = "admin_interface/edit_news";
+$route['admin/manager/delete-news/:num'] = "admin_interface/delete_news";
+
+$route['admin/:any/add-news'] = "admin_interface/add_news";
+$route['admin/:any/view-news/:num'] = "admin_interface/view_news";
+$route['admin/:any/edit-news/:num'] = "admin_interface/edit_news";
+$route['admin/:any/delete-news/:num'] = "admin_interface/delete_news";
 
 $route['admin/delete-book/:num'] = "admin_interface/delete_book";
 $route['admin/:any/delete-book/:num'] = "admin_interface/delete_zone_book";

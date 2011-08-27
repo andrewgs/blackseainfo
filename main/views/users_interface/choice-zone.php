@@ -34,6 +34,9 @@
 			<?php endif; ?>	
 				</div>
 				<div class="list-sidebar">
+				<?php if($userinfo['status']):?>
+					<?=$this->load->view('admin_interface/sidebar-menu');?>
+				<?php endif; ?>
 				<?php if(count($news)):?>
 					<h2 class="font-replace">Новости</h2>
 					<div id="news-stream" class="widget">

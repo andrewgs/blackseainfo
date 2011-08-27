@@ -14,6 +14,8 @@ class News extends CI_Model {
     }
 	
 	function read_records(){
+		
+		$this->db->where('date <=',date("Y-m-d"));
 		$this->db->order_by('date','DESC');
 		$query = $this->db->get('news');
 		return $query->result_array();
@@ -22,11 +24,36 @@ class News extends CI_Model {
 	function read_record($id){
 	
 		$this->db->where('id',$id);
-		$this->db->order_by('date','DESC');
 		$query = $this->db->get('news',1);
 		$data = $query->result_array();
 		if(count($data)) return $data[0];
 		return NULL;
+	}
+	
+	function insert_record($data){
+			
+		$this->title	= $data['title'];
+		$this->text		= $data['text'];
+		$this->date		= $data['date'];
+		$this->region 	= $data['region'];
+		$this->db->insert('news',$this);
+		return $this->db->insert_id();
+	}
+
+	function update_record($id,$data){
+			
+		$this->db->set('title',$data['title']);
+		$this->db->set('text',$data['text']);
+		$this->db->set('date',$data['date']);
+		$this->db->where('id',$id);
+		$this->db->update('news');
+		return $this->db->affected_rows();
+	}
+	
+	function delete_record($id){
+	
+		$this->db->where('id',$id);
+		$this->db->delete('news');
 	}
 	
 	function read_news($count,$region){
@@ -48,8 +75,20 @@ class News extends CI_Model {
 	
 	function read_limit_records($region,$count,$from){
 		
+		$this->db->where('date <=',date("Y-m-d"));
 		$this->db->where('region',$region);
 		$this->db->or_where('region',0);
+		$this->db->limit($count,$from);
+		$this->db->order_by('date DESC');
+		$query = $this->db->get('news');
+		$data = $query->result_array();
+		if(count($data)) return $data;
+		return NULL;
+	}
+	
+	function read_limit_zone($region,$count,$from){
+		
+		$this->db->where('region',$region);
 		$this->db->limit($count,$from);
 		$this->db->order_by('date DESC');
 		$query = $this->db->get('news');

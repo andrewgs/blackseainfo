@@ -11,7 +11,7 @@
 		<?php $country = $cur_country; ?>
 		<?php endif; ?>
 		<?php $cur_area = $regions[$i]['reg_area']; ?>
-		<?php if($cur_area != "none"): ?>
+		<?php if(!empty($cur_area)): ?>
 			<?php if($area != $cur_area):?>
 				<li><?=anchor($uri,$regions[$i]['reg_area'],array('class'=>'region'));?></li>
 			<?php $area = $cur_area; ?>
