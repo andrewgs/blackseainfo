@@ -19,21 +19,23 @@
 					<h2 class="font-replace"><?=$name;?></h2>
 					<div id="error-msg" class=""><?=validation_errors();?></div>
 					<div id="frmInsert" style="display:none; margin-left:5px;">
-						<?php $this->load->view('admin_interface/insert-video-form');?>
+						<?php $this->load->view('admin_interface/insert-photo-form');?>
 					</div>
 					<button id="btnInsert" style="height:2.5em; margin:10px 0px 10px 5px; min-width: 130px;">
 						<img src="<?=$baseurl;?>images/buttons/plus.png"><font size="3"> Добавить</font>
 					</button>
 					<div id="photo-frames">
-				<?php for($i=0;$i<count($video);$i++): ?>
-						<div class="frames" id="vd<?=$i?>">
-							<div id="id<?=$i?>" style="display:none;"><?=$video[$i]['id'];?></div>
-							<iframe src="<?=$video[$i]['link'];?>" width="210" height="118" frameborder="0"></iframe>
-							<br/>
-							<div style="float:right;">
-							<input type="image" title="Удалить" class="VideoDel" nID="<?=$i;?>" src="<?=$baseurl;?>images/buttons/delete.png"/>
-							</div>
+				<?php for($i=0;$i<count($camers);$i++): ?>
+					<div class="frames" id="cm<?=$i?>">
+						<div id="id<?=$i?>" style="display:none;"><?=$camers[$i]['id'];?></div>
+						<a href="#">
+	<img src="<?=$baseurl;?>material/viewthumb/<?=$camers[$i]['id'];?>" alt="<?=$camers[$i]['title'];?>" title="<?=$camers[$i]['title'];?>"/>
+						</a>
+						<br/>
+						<div style="float:right;">
+							<input type="image" title="Удалить" class="CamerDel" nID="<?=$i;?>" src="<?=$baseurl;?>images/buttons/delete.png"/>
 						</div>
+					</div>
 				<?php endfor; ?>
 					</div>
 				</div>
@@ -69,24 +71,24 @@
 		});
 		
 		$("#addItem").click(function(event){
+			var err = false;
 			$("#reserve-form .inpvalue").css('border-color','#D0D0D0');
-			if($("#link").val() == ''){
-				$("#link").css('border-color','#ff0000');
-				event.preventDefault();
-				msgerror('Пропущено обязательное поле');
-			}
+			if($("#title").val() == ''){err = true;$("#title").css('border-color','#ff0000');}
+			if($("#note").val() == ''){err = true;$("#note").css('border-color','#ff0000');}
+			if(err){event.preventDefault();msgerror('Пропущены обязательные поля'); return false;}
+			if($("#userfile").val() == ''){event.preventDefault();msgerror('Не указан файл');}
 		});
 		
-		$(".VideoDel").click(function(){
+		$(".CamerDel").click(function(){
 				var curID = $(this).attr("nID");
-				var VideoID = $("#id"+curID).text();
+				var CamerID = $("#id"+curID).text();
 				$.post(
-					"<?=$baseurl;?>admin/<?=$this->uri->segment(2);?>/manager/delete-video",
-					{'id':VideoID},
+					"<?=$baseurl;?>admin/<?=$this->uri->segment(2);?>/manager/delete-photo",
+					{'id':CamerID},
 					function(data){
 						if(data.status){
-							$("#vd"+curID).fadeOut("slow",function(){
-								$("#vd"+curID).remove();
+							$("#cm"+curID).fadeOut("slow",function(){
+								$("#cm"+curID).remove();
 								if($(".frames").size() == 0) window.location="<?=$baseurl.$this->uri->uri_string();?>";
 							});
 						}else

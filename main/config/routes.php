@@ -68,13 +68,13 @@ $route['admin/:any/edit-news/:num'] = "admin_interface/edit_news";
 $route['admin/:any/delete-news/:num'] = "admin_interface/delete_news";
 
 $route['admin/:any/manager/resorts-photo'] = "admin_interface/zone_photo";
-$route['admin/:any/manager/delete-photo'] = "admin_interface/delete_photo";
+$route['admin/:any/manager/delete-photo'] = "admin_interface/delete_material";
 
 $route['admin/:any/manager/video'] = "admin_interface/zone_video";
-$route['admin/:any/manager/add-video'] = "admin_interface/zone_add_video";
+$route['admin/:any/manager/delete-video'] = "admin_interface/delete_material";
 
 $route['admin/:any/manager/camers'] = "admin_interface/zone_camers";
-
+$route['admin/:any/manager/delete-camers'] = "admin_interface/delete_material";
 
 $route['admin/delete-book/:num'] = "admin_interface/delete_book";
 $route['admin/:any/delete-book/:num'] = "admin_interface/delete_zone_book";

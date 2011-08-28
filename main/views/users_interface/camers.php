@@ -17,7 +17,7 @@
 				<?php for($i=0;$i<count($camers);$i++): ?>
 						<div class="frames">
 							<a href="#">
-								<img src="<?=$baseurl;?>material/viewimage/<?=$camers[$i]['id'];?>" alt="<?=$camers[$i]['title'];?>" title="<?=$camers[$i]['title'];?>"/>
+								<img src="<?=$baseurl;?>material/viewthumb/<?=$camers[$i]['id'];?>" alt="<?=$camers[$i]['title'];?>" title="<?=$camers[$i]['title'];?>"/>
 						</a>
 					</div>
 				<?php endfor; ?>

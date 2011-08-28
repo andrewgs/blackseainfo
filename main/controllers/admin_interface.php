@@ -528,16 +528,6 @@ class Admin_interface extends CI_Controller {
 		$this->load->view('admin_interface/manager-zone-photo',$pagevar);
 	}
 	
-	function delete_photo(){
-	
-		$statusval = array('status'=>FALSE,'message'=>'Ошибка при удалении');
-		$id = trim($this->input->post('id'));
-		if(!$id) show_404();
-		$success = $this->materials->delete_record($id);
-		if($success) $statusval['status'] = TRUE;
-		echo json_encode($statusval);
-	}
-	
 	function zone_video(){
 		
 		$region = $this->regions->region_exist($this->uri->segment(2));
@@ -553,12 +543,27 @@ class Admin_interface extends CI_Controller {
 					'video'			=> $this->materials->read_records($region,2),
 					'uri_string'	=> 'manager'
 			);
-			
+		
+		if($this->input->post('submit')):
+			$this->form_validation->set_rules('link','','required|trim');
+			if(!$this->form_validation->run()):
+				$_POST['submit'] = NULL;
+				$this->zone_video();
+				return FALSE;
+			else:
+				$_POST['submit'] = NULL;
+				$_POST['title'] = $_POST['note'] = $_POST['image'] = $_POST['thumb'] = ''; 
+				$_POST['region'] = $region;	$_POST['type'] = 2; 
+				$news = $this->materials->insert_record($_POST);
+				redirect($this->uri->uri_string());
+			endif;
+		endif;
+		
 		$this->load->view('admin_interface/manager-zone-video',$pagevar);
 	}
 	
-	function zone_add_video(){
-		
+	function zone_camers(){
+	
 		$region = $this->regions->region_exist($this->uri->segment(2));
 		if(!$region) show_404();
 		$pagevar = array(
@@ -568,15 +573,42 @@ class Admin_interface extends CI_Controller {
 					'baseurl' 		=> base_url(),
 					'userinfo'		=> $this->user,
 					'regions'		=> $this->regions->read_records(),
-					'name'			=> $this->regions->read_city($region).'<br/>Добавление фотографии:',
+					'name'			=> $this->regions->read_city($region).'<br/>Веб-камеры:',
+					'camers'		=> $this->materials->read_records($region,3),
 					'uri_string'	=> 'manager'
 			);
-			
-		$this->load->view('admin_interface/manager-zone-addphoto',$pagevar);
+		
+		if($this->input->post('submit')):
+			$this->form_validation->set_rules('title','','required|htmlspecialchars|strip_tags|trim');
+			$this->form_validation->set_rules('note','','required|trim');
+			$this->form_validation->set_rules('userfile','','callback_userfile_check');
+			if(!$this->form_validation->run()):
+				$_POST['submit'] = NULL;
+				$this->zone_photo();
+				return FALSE;
+			else:
+				$_POST['submit'] = NULL;
+				if($_FILES['userfile']['error'] != 4):
+					$_POST['image'] = $this->resize_image($_FILES['userfile']['tmp_name'],540,360,TRUE);
+					$_POST['thumb'] = $this->resize_image($_FILES['userfile']['tmp_name'],150,140,TRUE);
+				endif;
+				$_POST['region'] = $region;	$_POST['link'] = ''; $_POST['type'] = 3; 
+				$news = $this->materials->insert_record($_POST);
+				redirect($this->uri->uri_string());
+			endif;
+		endif;
+		
+		$this->load->view('admin_interface/manager-zone-camers',$pagevar);
 	}
 	
-	function zone_camers(){
-		
+	function delete_material(){
+	
+		$statusval = array('status'=>FALSE,'message'=>'Ошибка при удалении');
+		$id = trim($this->input->post('id'));
+		if(!$id) show_404();
+		$success = $this->materials->delete_record($id);
+		if($success) $statusval['status'] = TRUE;
+		echo json_encode($statusval);
 	}
 	
 	/*********************************************************************************************************************/
