@@ -13,6 +13,7 @@
 			<div id="information" class="white-texture rounded clearfix">
 				<div class="list-main">
 					<h2 class="font-replace"><img src="<?=$baseurl;?>images/left-arrow.png"/><?=$name;?></h2>
+					<hr/>
 					<h2 class="font-replace">Добавление новости</h2>
 					<?=$this->load->view('admin_interface/edit-news-form');?>
 				</div>

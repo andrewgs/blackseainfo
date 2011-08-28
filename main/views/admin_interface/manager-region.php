@@ -57,12 +57,12 @@
 			<?php else: ?>
 					<h2 class="font-replace">Информация отсутствует</h2>
 			<?php endif; ?>
-				<div id="frmInsert" style="display:none;">
-					<?php $this->load->view('admin_interface/insert-region-form');?>
-				</div>
-				<button id="btnInsert" style="height:2.5em; margin-top:15px; min-width: 130px;">
-					<img src="<?=$baseurl;?>images/buttons/news-plus.png"><font size="3"> Добавить</font>
-				</button>
+					<div id="frmInsert" style="display:none;">
+						<?php $this->load->view('admin_interface/insert-region-form');?>
+					</div>
+					<button id="btnInsert" style="height:2.5em; margin-top:15px; min-width: 130px;">
+						<img src="<?=$baseurl;?>images/buttons/news-plus.png"><font size="3"> Добавить</font>
+					</button>
 				</div>
 				<div class="list-sidebar">
 				<?=$this->load->view('admin_interface/sidebar-menu');?>

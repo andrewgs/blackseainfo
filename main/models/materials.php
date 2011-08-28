@@ -8,7 +8,8 @@ class Materials extends CI_Model {
 	var $link	= "";
 	var $type	= 0;
 	var $region	= 0;
-	var $image	= 0;
+	var $image	= '';
+	var $thumb	= '';
 	
 	function __construct(){
         
@@ -44,6 +45,26 @@ class Materials extends CI_Model {
 		$sql = "SELECT id,title,note FROM materials WHERE type = $type ORDER BY rand() LIMIT $count"; 
 		$query = $this->db->query($sql);
 		return $query->result_array();
+	}
+
+	function insert_record($data){
+			
+		$this->title	= $data['title'];
+		$this->note		= $data['note'];
+		$this->link		= $data['link'];
+		$this->type		= $data['type'];
+		$this->region 	= $data['region'];
+		$this->image 	= $data['image'];
+		$this->thumb 	= $data['thumb'];
+		$this->db->insert('materials',$this);
+		return $this->db->insert_id();
+	}
+
+	function delete_record($id){
+	
+		$this->db->where('id',$id);
+		$this->db->delete('materials');
+		return $this->db->affected_rows();
 	}
 	
 	function get_image($id){

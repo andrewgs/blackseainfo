@@ -17,6 +17,7 @@ class Admin_interface extends CI_Controller {
 		$this->load->model('booking');
 		$this->load->model('union');
 		$this->load->model('news');
+		$this->load->model('materials');
 		$cookieuid = $this->session->userdata('login_id');
 		if(isset($cookieuid) and !empty($cookieuid)):
 			$this->user['uid'] = $this->session->userdata('userid');
@@ -285,9 +286,9 @@ class Admin_interface extends CI_Controller {
 					'userinfo'		=> $this->user,
 					'regions'		=> $this->regions->read_records(),
 					'name'			=> $this->regions->read_city($region).'<br/>Управление:',
-					'uri_string'	=> ''
+					'uri_string'	=> 'manager'
 			);
-			
+		$this->session->set_userdata('uripath',$this->uri->uri_string());
 		$this->load->view('admin_interface/manager-zone',$pagevar);
 	}
 	
@@ -487,12 +488,123 @@ class Admin_interface extends CI_Controller {
 		$this->news->delete_record($this->uri->segment(4));
 		redirect($this->session->userdata('uripath'));
 	}
-
+	
+	function zone_photo(){
+		
+		$region = $this->regions->region_exist($this->uri->segment(2));
+		if(!$region) show_404();
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Управление зоной отдыха",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'name'			=> $this->regions->read_city($region).'<br/>Фотографии:',
+					'images'		=> $this->materials->read_records($region,1),
+					'uri_string'	=> 'manager'
+			);
+		
+		if($this->input->post('submit')):
+			$this->form_validation->set_rules('title','','required|htmlspecialchars|strip_tags|trim');
+			$this->form_validation->set_rules('note','','required|trim');
+			$this->form_validation->set_rules('userfile','','callback_userfile_check');
+			if(!$this->form_validation->run()):
+				$_POST['submit'] = NULL;
+				$this->zone_photo();
+				return FALSE;
+			else:
+				$_POST['submit'] = NULL;
+				if($_FILES['userfile']['error'] != 4):
+					$_POST['image'] = $this->resize_image($_FILES['userfile']['tmp_name'],540,360,TRUE);
+					$_POST['thumb'] = $this->resize_image($_FILES['userfile']['tmp_name'],150,140,TRUE);
+				endif;
+				$_POST['region'] = $region;	$_POST['link'] = ''; $_POST['type'] = 1; 
+				$news = $this->materials->insert_record($_POST);
+				redirect($this->uri->uri_string());
+			endif;
+		endif;
+		
+		$this->load->view('admin_interface/manager-zone-photo',$pagevar);
+	}
+	
+	function delete_photo(){
+	
+		$statusval = array('status'=>FALSE,'message'=>'Ошибка при удалении');
+		$id = trim($this->input->post('id'));
+		if(!$id) show_404();
+		$success = $this->materials->delete_record($id);
+		if($success) $statusval['status'] = TRUE;
+		echo json_encode($statusval);
+	}
+	
+	function zone_video(){
+		
+		$region = $this->regions->region_exist($this->uri->segment(2));
+		if(!$region) show_404();
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Управление зоной отдыха",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'name'			=> $this->regions->read_city($region).'<br/>Видео материалы:',
+					'video'			=> $this->materials->read_records($region,2),
+					'uri_string'	=> 'manager'
+			);
+			
+		$this->load->view('admin_interface/manager-zone-video',$pagevar);
+	}
+	
+	function zone_add_video(){
+		
+		$region = $this->regions->region_exist($this->uri->segment(2));
+		if(!$region) show_404();
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Управление зоной отдыха",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'name'			=> $this->regions->read_city($region).'<br/>Добавление фотографии:',
+					'uri_string'	=> 'manager'
+			);
+			
+		$this->load->view('admin_interface/manager-zone-addphoto',$pagevar);
+	}
+	
+	function zone_camers(){
+		
+	}
+	
 	/*********************************************************************************************************************/
 	
 	function region_alias($alias){
 		if($this->regions->region_exist($alias)):
 			$this->form_validation->set_message('region_alias','Псевдоним уже существует');
+			return FALSE;
+		endif;
+		return TRUE;
+	}
+
+	function userfile_check($file){
+		
+		$tmpName = $_FILES['userfile']['tmp_name'];
+		
+		if($_FILES['userfile']['error'] == 4):
+			$this->form_validation->set_message('userfile_check','Не указан файл');
+			return FALSE;
+		endif;
+		if($_FILES['userfile']['error'] != 4):
+			if(!$this->case_image($tmpName)):
+				$this->form_validation->set_message('userfile_check','Формат не поддерживается');
+				return FALSE;
+			endif;
+		endif;
+		if($_FILES['userfile']['error'] == 1):
+			$this->form_validation->set_message('userfile_check','Размер более 5 Мб!');
 			return FALSE;
 		endif;
 		return TRUE;
@@ -527,117 +639,7 @@ class Admin_interface extends CI_Controller {
 		return preg_replace($pattern, $replacement,$field);
 	}
 											
-	function userfile_check($file){
-		
-		$tmpName = $_FILES['userfile']['tmp_name'];
-		
-		if($_FILES['userfile']['error'] == 4):
-			$this->form_validation->set_message('userfile_check','Не указан файл');
-			return FALSE;
-		endif;
-		if($_FILES['userfile']['error'] != 4):
-			if(!$this->case_image($tmpName)):
-				$this->form_validation->set_message('userfile_check','Формат не поддерживается');
-				return FALSE;
-			endif;
-		endif;
-		if($_FILES['userfile']['error'] == 1):
-			$this->form_validation->set_message('userfile_check','Размер более 5 Мб!');
-			return FALSE;
-		endif;
-		return TRUE;
-	}
-	
-	function userfile_edit($file){
-		
-		$tmpName = $_FILES['userfile']['tmp_name'];
-		
-		/*if($_FILES['userfile']['error'] == 4):
-			$this->form_validation->set_message('userfile_check','Не указан файл');
-			return FALSE;
-		endif;*/
-		if($_FILES['userfile']['error'] != 4):
-			if(!$this->case_image($tmpName)):
-				$this->form_validation->set_message('userfile_check','Формат не поддерживается');
-				return FALSE;
-			endif;
-		endif;
-		if($_FILES['userfile']['error'] == 1):
-			$this->form_validation->set_message('userfile_check','Размер более 5 Мб!');
-			return FALSE;
-		endif;
-		return TRUE;
-	}
-	
-	function resize_img($tmpName,$wgt,$hgt,$ratio){
-			
-		chmod($tmpName,0777);
-		$img = getimagesize($tmpName);		
-		$size_x = $img[0];
-		$size_y = $img[1];
-		$wight = $wgt;
-		$height = $hgt; 
-		if(($size_x < $wgt) or ($size_y < $hgt)):
-			$this->resize_image($tmpName,$wgt,$hgt,FALSE);
-			$image = file_get_contents($tmpName);
-			return $image;
-		endif;
-		if($size_x > $size_y):
-			$this->resize_image($tmpName,$size_x,$hgt,$ratio);
-		else:
-			$this->resize_image($tmpName,$wgt,$size_y,$ratio);
-		endif;
-		$img = getimagesize($tmpName);		
-		$size_x = $img[0];
-		$size_y = $img[1];
-		switch ($img[2]){
-			case 1: $image_src = imagecreatefromgif($tmpName); break;
-			case 2: $image_src = imagecreatefromjpeg($tmpName); break;
-			case 3:	$image_src = imagecreatefrompng($tmpName); break;
-		}
-		$x = round(($size_x/2)-($wgt/2));
-		$y = round(($size_y/2)-($hgt/2));
-		if($x < 0):
-			$x = 0;	$wight = $size_x;
-		endif;
-		if($y < 0):
-			$y = 0; $height = $size_y;
-		endif;
-		$image_dst = ImageCreateTrueColor($wight,$height);
-		if($size_x > $size_y):
-			imageCopy($image_dst,$image_src,0,0,$x,0,$wight,$height);
-		else:
-			imageCopy($image_dst,$image_src,0,0,$x,20,$wight,$height+20);
-		endif;
-		imagePNG($image_dst,$tmpName);
-		imagedestroy($image_dst);
-		imagedestroy($image_src);
-		$image = file_get_contents($tmpName);
-		return $image;
-	}
-													 				
-	function resize_big_image($tmpName,$wgt,$hgt,$ratio){
-			
-		chmod($tmpName,0777);
-		
-		$img = getimagesize($tmpName);
-		$this->resize_image($tmpName,$wgt,$img[1],$ratio);
-		switch ($img[2]){
-			case 1: $image_src = imagecreatefromgif($tmpName); break;
-			case 2: $image_src = imagecreatefromjpeg($tmpName); break;
-			case 3:	$image_src = imagecreatefrompng($tmpName); break;
-		}
-		
-		$image_dst = ImageCreateTrueColor($wgt,$hgt);
-		imageCopy($image_dst,$image_src,0,0,0,20,$wgt,$hgt);
-		imagePNG($image_dst,$tmpName);
-		imagedestroy($image_dst);
-		imagedestroy($image_src);
-		$image = file_get_contents($tmpName);
-		return $image;
-	}			
-																		
-	function resize_main_image($tmpName,$wgt,$hgt,$ratio){
+	function resize_image($tmpName,$wgt,$hgt,$ratio){
 			
 		chmod($tmpName,0777);
 		$img = getimagesize($tmpName);
@@ -660,53 +662,15 @@ class Admin_interface extends CI_Controller {
 			case 3:	$image_src = imagecreatefrompng($tmpName); break;
 		}
 		$img = getimagesize($tmpName);
-		$height = $img[1]-20;
-		if($height>$hgt):
-			$image_dst = ImageCreateTrueColor($wgt,$hgt);
-		else:
-			$image_dst = ImageCreateTrueColor($wgt,$img[1]-20);
-		endif;
-		imageCopy($image_dst,$image_src,0,0,0,20,$wgt,$img[1]+20);
+		$image_dst = ImageCreateTrueColor($wgt,$img[1]);
+		imageCopy($image_dst,$image_src,0,0,0,0,$wgt,$img[1]);
 		imagePNG($image_dst,$tmpName);
 		imagedestroy($image_dst);
 		imagedestroy($image_src);
 		$image = file_get_contents($tmpName);
 		return $image;
 	}				
-
-	function resize_image($image,$wgt,$hgt,$ratio){
 	
-		$this->load->library('image_lib');
-		$this->image_lib->clear();
-		$config['image_library'] 	= 'gd2';
-		$config['source_image']		= $image; 
-		$config['create_thumb'] 	= FALSE;
-		$config['maintain_ratio'] 	= $ratio;
-		$config['width'] 			= $wgt;
-		$config['height'] 			= $hgt;
-				
-		$this->image_lib->initialize($config);
-		$this->image_lib->resize();
-	}
-
-	function resize_photo($tmpName,$wgt,$hgt,$ratio){
-		
-		chmod($tmpName,0777);
-		$this->load->library('image_lib');
-		$this->image_lib->clear();
-		$config['image_library'] 	= 'gd2';
-		$config['source_image']		= $tmpName; 
-		$config['create_thumb'] 	= FALSE;
-		$config['maintain_ratio'] 	= $ratio;
-		$config['width'] 			= $wgt;
-		$config['height'] 			= $hgt;
-				
-		$this->image_lib->initialize($config);
-		$this->image_lib->resize();
-		
-		return file_get_contents($tmpName);
-	}
-
 	function case_image($file){
 			
 		$info = getimagesize($file);

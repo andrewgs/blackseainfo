@@ -4698,7 +4698,7 @@
 			</phptree>
 		</csfile><csfile name="S:\home\blackseainfo.ru\www\main\views\admin_interface\manager-region.php" crc="1098270962">
 			<phptree>
-				<treenode node="baseurl;Php:Var Name;105;49;113;49;34;;;v;;r;;d-1,-1;;b0,0;;m">
+				<treenode node="baseurl;Php:Var Name;114;49;122;49;34;;;v;;r;;d-1,-1;;b0,0;;m">
 				</treenode>
 				<treenode node="i;Php:Var Name;16;35;18;35;34;;;v;;r;;d-1,-1;;b0,0;;m">
 				</treenode>
@@ -5546,6 +5546,11 @@
 		</csfile><csfile name="S:\home\blackseainfo.ru\www\js\libs\jquery-1.6.2.min.js" crc="-2049449502">
 		</csfile><csfile name="S:\home\blackseainfo.ru\www\js\libs\cufon.js" crc="14207921">
 		</csfile><csfile name="S:\home\blackseainfo.ru\www\js\fonts\myriad-pro.js" crc="1697569074">
+		</csfile><csfile name="S:\home\blackseainfo.ru\www\js\datepicker\jquery.ui.widget.js" crc="-1937437254">
+		</csfile><csfile name="S:\home\blackseainfo.ru\www\js\datepicker\jquery.ui.datepicker.js" crc="363207354">
+		</csfile><csfile name="S:\home\blackseainfo.ru\www\js\datepicker\jquery.ui.datepicker-ru.js" crc="1313048221">
+		</csfile><csfile name="S:\home\blackseainfo.ru\www\js\datepicker\jquery.ui.core.js" crc="1491572418">
+		</csfile><csfile name="S:\home\blackseainfo.ru\www\js\datepicker\jquery.bgiframe-2.1.1.js" crc="1241897770">
 		</csfile><csfile name="S:\home\blackseainfo.ru\www\js\script.js" crc="1928483080">
 		</csfile><csfile name="S:\home\blackseainfo.ru\www\js\plugins.js" crc="693837194">
 		</csfile><csfile name="S:\home\blackseainfo.ru\www\js\placeholder.jquery.js" crc="853653736">
@@ -5565,4 +5570,6 @@
 				</treenode>
 			</phptree>
 		</csfile><csfile name="S:\home\blackseainfo.ru\www\.htaccess" crc="332295565">
-		</csfile></codestructure></project>
+		</csfile></codestructure><dbgurls>
+	</dbgurls>
+</project>
