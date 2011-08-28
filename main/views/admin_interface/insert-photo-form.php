@@ -5,7 +5,7 @@
 		<div>&nbsp;</div>
 		<input class="text-form-input inpvalue" id="userfile" type="file" name="userfile">
 		<div>Поддерживаемые форматы: JPG, GIF, PNG</div>
-		<label>Описание:</label>
+		<label>Описание:<span class="" title="Поле не может быть пустым">*</span></label>
 		<textarea placeholder="Введите описание" id="note" class="inpvalue" name="note"><?=set_value('note');?></textarea>
 		
 		<div>&nbsp;</div>

@@ -1,5 +1,5 @@
 <?= form_open($this->uri->uri_string(),array('id'=>'reserve-form','class'=>'content-form')); ?>
-	<div id="book-form">
+	<div id="region-form">
 		<label>Город: <span class="" title="Поле не может быть пустым">*</span></label>
 		<input type="text" class="inpvalue" id="name" name="name" value="<?=set_value('name');?>" maxlength="100" placeholder="Введите город"/>
 		<label>Область/район/край:</label>

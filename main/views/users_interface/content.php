@@ -34,6 +34,7 @@
 				<?php endif; ?>
 				<?php if($count < 3): ?>
 					<div class="advertisment clearfix">
+						<h3 class="font-replace"><?=$catalog[$i]['ctl_name'];?></h3>
 						<img src="<?=$baseurl;?>catalog/viewimage/<?=$catalog[$i]['ctl_id'];?>" alt="<?=$catalog[$i]['ctl_name'];?>" title="<?=$catalog[$i]['ctl_name'];?>"/>
 						<div><?=$catalog[$i]['ctl_short'];?></div>
 						<?=$link;?>

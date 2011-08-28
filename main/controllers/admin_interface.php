@@ -18,6 +18,9 @@ class Admin_interface extends CI_Controller {
 		$this->load->model('union');
 		$this->load->model('news');
 		$this->load->model('materials');
+		$this->load->model('types');
+		$this->load->model('catalog');
+		$this->load->model('images');
 		$cookieuid = $this->session->userdata('login_id');
 		if(isset($cookieuid) and !empty($cookieuid)):
 			$this->user['uid'] = $this->session->userdata('userid');
@@ -198,7 +201,7 @@ class Admin_interface extends CI_Controller {
 			$this->form_validation->set_rules('name','','required|htmlspecialchars|strip_tags|trim');
 			$this->form_validation->set_rules('area','','trim');
 			$this->form_validation->set_rules('district','','required|trim');
-			$this->form_validation->set_rules('alias','','required|trim|callback_region_alias');
+			$this->form_validation->set_rules('alias','','required|trim|strtolower|callback_region_alias');
 			$this->form_validation->set_rules('priority','','required|trim');
 			if(!$this->form_validation->run()):
 				$_POST['submit'] = NULL;
@@ -258,6 +261,93 @@ class Admin_interface extends CI_Controller {
 		echo json_encode($statusval);
 	}
 	
+	function valid_class_alias(){
+	
+		$statusval = array('status'=>FALSE,'message'=>'Псевдоним уже существует');
+		$alias = trim($this->input->post('alias'));
+		if(!$alias) show_404();
+		$success = $this->types->type_exist($alias);
+		if(!$success):
+			$statusval['status'] = TRUE;
+			$statusval['message'] = 'Псевдоним свободен';
+		endif;
+		echo json_encode($statusval);
+	}
+	
+	function valid_unit_alias(){
+	
+		$statusval = array('status'=>FALSE,'message'=>'Псевдоним уже существует');
+		$alias = trim($this->input->post('alias'));
+		$region = trim($this->input->post('region'));
+		if(!$alias || !$region) show_404();
+		$rid = $this->regions->region_exist($region);
+		$success = $this->catalog->unit_exist($alias,$rid);
+		if(!$success):
+			$statusval['status'] = TRUE;
+			$statusval['message'] = 'Псевдоним свободен';
+		endif;
+		echo json_encode($statusval);
+	}
+	
+	function manager_class(){
+		
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Управление классами услуг",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'name'			=> "Список классов услуг",
+					'class'			=> $this->types->read_records(),
+					'uri_string'	=> ''
+			);
+			
+		if($this->input->post('submit')):
+			$this->form_validation->set_rules('name','','required|htmlspecialchars|strip_tags|trim');
+			$this->form_validation->set_rules('group','','required|trim');
+			$this->form_validation->set_rules('alias','','required|trim|strtolower|callback_class_alias');
+			if(!$this->form_validation->run()):
+				$_POST['submit'] = NULL;
+				$this->manager_class();
+				return FALSE;
+			else:
+				$_POST['submit'] = NULL;
+				$this->types->insert_record($_POST);
+				redirect($this->uri->uri_string());
+			endif;
+		endif;
+		
+		$this->load->view('admin_interface/manager-class',$pagevar);
+	}
+
+	function save_class(){
+		
+		$statusval = array('status'=>FALSE,'alias'=>FALSE,'message'=>'Данные не изменились','name'=>'','group'=>'','alias'=>'');
+		$rid = $this->input->post('id');
+		$name = trim($this->input->post('name'));
+		$group = trim($this->input->post('group'));
+		$alias = trim($this->input->post('alias'));
+		if(!$rid || !$name || !$group || !$alias) show_404();
+		
+		$exist = $this->types->type_exist($alias);
+		if($exist && ($exist != $rid)):
+			$this->db->insert('test',array('data'=>$exist));
+			$statusval['status'] = FALSE;
+			$statusval['alias'] = TRUE;
+			$statusval['message'] = 'Псевдоним уже существует';
+		else:
+			$success = $this->types->save_type($rid,$name,$group,$alias);
+			if($success):
+				$statusval['status'] = TRUE;
+				$statusval['name'] = $name;
+				$statusval['group'] = $group;
+				$statusval['alias'] = $alias;
+			endif;
+		endif;
+		echo json_encode($statusval);
+	}
+	
 	function choice_zone(){
 	
 		$pagevar = array(
@@ -286,8 +376,45 @@ class Admin_interface extends CI_Controller {
 					'userinfo'		=> $this->user,
 					'regions'		=> $this->regions->read_records(),
 					'name'			=> $this->regions->read_city($region).'<br/>Управление:',
+					'class'			=> $this->types->read_records(),
+					'curclass'		=> 0,
+					'catalog'		=> array(),
+					'classname'		=> '',
 					'uri_string'	=> 'manager'
 			);
+		
+		if($this->input->post('sclass')):
+			$pagevar['curclass'] = $_POST['class'];
+			$pagevar['curtype'] = $this->types->read_groupid($_POST['class']);
+			$pagevar['classname'] = $this->types->read_name($_POST['class']);
+			$pagevar['catalog'] = $this->catalog->read_catalog_class_zone($region,$pagevar['curclass']);
+		else:
+			$pagevar['curclass'] = $pagevar['class'][0]['tps_id'];
+			$pagevar['curtype'] = $pagevar['class'][0]['tps_group'];
+			$pagevar['classname'] = $pagevar['class'][0]['tps_name'];
+			$pagevar['catalog'] = $this->catalog->read_catalog_class_zone($region,$pagevar['curclass']);
+		endif;
+		if($this->input->post('addunit')):
+			$this->form_validation->set_rules('name','','required|htmlspecialchars|strip_tags|trim');
+			$this->form_validation->set_rules('userfile','','callback_userfile_check');
+			$this->form_validation->set_rules('short','','required|htmlspecialchars|strip_tags|trim');
+			$this->form_validation->set_rules('note','','required|htmlspecialchars|strip_tags|trim');
+			$this->form_validation->set_rules('price','','required|htmlspecialchars|strip_tags|trim');
+			$this->form_validation->set_rules('alias','','required|trim|strtolower|callback_unit_alias');
+			if(!$this->form_validation->run()):
+				$_POST['submit'] = NULL;
+				$this->manager_zone();
+				return FALSE;
+			else:
+				$_POST['submit'] = NULL;
+				if($_FILES['userfile']['error'] != 4):
+					$_POST['image'] = $this->resize_image($_FILES['userfile']['tmp_name'],90,90,TRUE);
+				endif;
+				$_POST['region'] = $region;
+				$this->catalog->insert_record($_POST);
+				redirect('admin/'.$this->uri->segment(2).'/manager/view-unit/'.$_POST['alias']);
+			endif;
+		endif;
 		$this->session->set_userdata('uripath',$this->uri->uri_string());
 		$this->load->view('admin_interface/manager-zone',$pagevar);
 	}
@@ -391,6 +518,27 @@ class Admin_interface extends CI_Controller {
 					'uri_string'	=> 'news'
 			);
 		$this->load->view('admin_interface/view-news',$pagevar);
+	}
+	
+	function view_unit(){
+		
+		$region = $this->regions->region_exist($this->uri->segment(2));
+		if(!$region) show_404();
+		$unit = $this->catalog->unit_exist($this->uri->segment(5),$region);
+		if(!$unit) show_404();
+		$pagevar = array(
+					'description'	=> '',
+					'author'		=> '',
+					'title'			=> "BlackSeaInfo.ru - Просмотр места отдыха",
+					'baseurl' 		=> base_url(),
+					'userinfo'		=> $this->user,
+					'regions'		=> $this->regions->read_records(),
+					'name'			=> anchor($this->session->userdata('uripath'),'Вернуться назад'),
+					'unit'			=> $this->catalog->read_unit($unit),
+					'images'		=> $this->images->read_records($unit),
+					'uri_string'	=> 'manager'
+			);
+		$this->load->view('admin_interface/view-unit',$pagevar);
 	}
 	
 	function add_news(){
@@ -616,6 +764,23 @@ class Admin_interface extends CI_Controller {
 	function region_alias($alias){
 		if($this->regions->region_exist($alias)):
 			$this->form_validation->set_message('region_alias','Псевдоним уже существует');
+			return FALSE;
+		endif;
+		return TRUE;
+	}
+
+	function class_alias($alias){
+		if($this->types->type_exist($alias)):
+			$this->form_validation->set_message('class_alias','Псевдоним уже существует');
+			return FALSE;
+		endif;
+		return TRUE;
+	}
+
+	function unit_alias($alias){
+		
+		if($this->catalog->unit_exist($alias,$this->uri->segment(2))):
+			$this->form_validation->set_message('class_alias','Псевдоним уже существует');
 			return FALSE;
 		endif;
 		return TRUE;

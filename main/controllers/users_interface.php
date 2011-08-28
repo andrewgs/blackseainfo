@@ -70,7 +70,6 @@ class Users_interface extends CI_Controller {
 					'userinfo'		=> $this->user,
 					'catalog'		=> $this->catalog->read_catalog_zone($region),
 					'regions'		=> $this->regions->read_records(),
-//					'subtype'		=> $this->types->read_groups(),
 					'slide'			=> $this->materials->read_limit_records($region,5,1),
 					'video'			=> $this->materials->read_limit_records($region,1,2),
 					'subtype'		=> $this->union->zone_subtype($region),
@@ -93,7 +92,7 @@ class Users_interface extends CI_Controller {
 		
 		$region = $this->regions->region_exist($this->uri->segment(2));
 		if(!$region) show_404();
-		$unit = $this->catalog->unit_exist($this->uri->segment(3));
+		$unit = $this->catalog->unit_exist($this->uri->segment(3),$region);
 		if(!$unit) show_404();
 		$pagevar = array(
 					'description'	=> '',
@@ -186,7 +185,6 @@ class Users_interface extends CI_Controller {
 					'userinfo'		=> $this->user,
 					'catalog'		=> $this->catalog->read_subtype_zone($region,$type),
 					'regions'		=> $this->regions->read_records(),
-//					'subtype'		=> $this->types->read_groups(),
 					'slide'			=> $this->materials->read_limit_records($region,5,1),
 					'video'			=> $this->materials->read_limit_records($region,1,2),
 					'subtype'		=> $this->union->zone_subtype($region),

@@ -8,45 +8,63 @@
 <div id="container">
 	<?=$this->load->view('users_interface/header');?>
 	<div id="main" role="main" class="clearfix">
-		<?=$this->load->view('admin_interface/regions');?>
+		<?=$this->load->view('users_interface/regions');?>
 		<div id="content">
 			<div id="information" class="white-texture rounded clearfix">
 				<div class="list-main">
+			<?php if(count($class)): ?>
 					<h2 class="font-replace"><?=$name;?></h2>
 					<hr/>
-					<div class="">
-						<?php $region = $this->uri->segment(2);?>
-						<?=anchor('admin/'.$region.'/manager/resorts-photo','Фотографии');?>
-						<?=anchor('admin/'.$region.'/manager/video','Видео материалы');?>
-						<?=anchor('admin/'.$region.'/manager/camers','Веб-камеры');?>
-					</div>
-					<hr/>
-					<?php $this->load->view('admin_interface/select-class-form');?>
-					<div>&nbsp;</div>
-					<hr/>
-					<h2 class="font-replace"><?=$classname;?></h2>
-					<div id="frmInsert" style="display:none;">
-						<?php $this->load->view('admin_interface/insert-unit-form');?>
-					</div>
-					<button id="btnInsert" style="height:2.5em; margin-top:5px; min-width: 130px;">
-						<img src="<?=$baseurl;?>images/buttons/plus2.png"><font size="3"> Добавить</font>
-					</button>
-					<div>&nbsp;</div>
-				<?php if(count($catalog)): ?>
-					<?php for($i=0;$i<count($catalog);$i++): ?>
-					<div class="advertisment clearfix">
-						<h3 class="font-replace"><?=$catalog[$i]['ctl_name'];?></h3>
-						<img src="<?=$baseurl;?>catalog/viewimage/<?=$catalog[$i]['ctl_id'];?>" alt="<?=$catalog[$i]['ctl_name'];?>" title="<?=$catalog[$i]['ctl_name'];?>"/>
-						<div><?=$catalog[$i]['ctl_short'];?></div>
-						<?=anchor('admin/'.$this->uri->segment(2).'/manager/view-unit/'.$catalog[$i]['ctl_alias'],'Просмотреть');?>
-						<?=anchor('','Редактировать');?>
-						<?=anchor('','Фотографии');?>
-						<?=anchor('','Удалить');?>
-					</div>
-				<?php endfor;?>
+					<h2 class="">Для справок! Существует 4 группы.</h2>
+					<ul>
+						<li>Код "1" - Места отдыха (готели, гостиницы)</li>
+						<li>Код "2" - Экскурсии</li>
+						<li>Код "3" - Развлечения (ночные клубы, гостиницы и т.д.) </li>
+						<li>Код "4" - Такси</li>
+					</ul>
+					<div id="error-msg" class=""><?=validation_errors();?></div>
+					<table summary="Классы услуг">
+						<thead>
+							<tr class="odd">
+								<th scope="col" abbr="ID">ID</th>
+								<th scope="col" abbr="НАЗВАНИЕ">НАЗВАНИЕ</th>	
+								<th scope="col" abbr="ГРУППА">ГРУППА</th>
+								<th scope="col" abbr="ПСЕВДОНИМ">ПСЕВДОНИМ</th>
+								<th scope="col" abbr="ДЕЙСТВИЯ">&nbsp;</th>
+							</tr>	
+						</thead>
+					    <tfoot>	
+						 	&nbsp;
+						</tfoot>
+						<tbody>
+						<?php for($i=0;$i<count($class);$i++):?>
+							<?php if($i % 2 !== 0): ?>
+								<tr rID="<?=$i?>"> 
+							<?php else: ?>
+								<tr class="odd" rID="<?=$i?>"> 
+							<?php endif; ?>
+								<td rID="<?=$i?>"><?=$class[$i]['tps_id'];?></td>
+	<td><input placeholder="Введите название" id="vName<?=$i?>" rID="<?=$i?> name="name" type="text" value="<?=$class[$i]['tps_name'];?>"></td>
+	<td><input placeholder="Укажите группу" class="digital" maxlength="1" style="width:50px;" id="vGroup<?=$i?>" rID="<?=$i?> name="group" type="text" value="<?=$class[$i]['tps_group'];?>"></td>
+	<td><input placeholder="Введите превдоним" class="literal" id="vAlias<?=$i?>" rID="<?=$i?> name="alias" type="text" value="<?=$class[$i]['tps_alias'];?>"></td>
+								<td>
+									<div class="">
+						<input type="image" title="Сохранить" class="BtnSave" id="s<?=$i?>" rID="<?=$i?>" src="<?=$baseurl;?>images/buttons/save.png" />
+									</div>
+								</td> 
+							</tr>
+							<?php endfor; ?>	
+						</tbody>
+					</table>
 			<?php else: ?>
-						<h2 class="font-replace">Информация отсутствует</h2>
+					<h2 class="font-replace">Информация отсутствует</h2>
 			<?php endif; ?>
+					<div id="frmInsert" style="display:none;">
+						<?php $this->load->view('admin_interface/insert-types-form');?>
+					</div>
+					<button id="btnInsert" style="height:2.5em; margin-top:15px; min-width: 130px;">
+						<img src="<?=$baseurl;?>images/buttons/news-plus.png"><font size="3"> Добавить</font>
+					</button>
 				</div>
 				<div class="list-sidebar">
 				<?=$this->load->view('admin_interface/sidebar-menu');?>
@@ -66,31 +84,25 @@
 			if($("#frmInsert").is(":hidden")){
 				$("#btnInsert").html('<img src="<?=$baseurl;?>images/buttons/arrow-curve.png"><font size="3"> Отменить</font>');
 				$("#frmInsert").slideDown("slow");
-				$("html, body").animate({scrollTop:'350px'},"slow");
+				var height = ($(window).height()*$("tr").size())/30;
+				$("html, body").animate({scrollTop:height+'px'},"slow");
 			}else{
 				$("#frmInsert").slideUp("slow",function(){
 					$("#frmInsert").hide();
 					$("#error-msg").text('');
 					$("#btnInsert").html('<img src="<?=$baseurl;?>images/buttons/news-plus.png"><font size="3"> Добавить</font>');
-					$("#insert-unit .inpvalue").val('');
-					$("#userfile").val('');
-					$("#insert-unit .inpvalue").css('border-color','#D0D0D0');
-					$("html, body").animate({scrollTop:'0px'},"slow");
+					$("#reserve-form .inpvalue").val('');
+					$("#reserve-form .inpvalue").css('border-color','#D0D0D0');
 				 });
 			}
 		});
 		
 		$("#addItem").click(function(event){
 			var err = false;
-			 $("#insert-unit .inpvalue").css('border-color','#D0D0D0');
-			 $("#insert-unit .inpvalue").each(function(){
-			 	if($(this).val() == ''){
-					err = true;
-					$(this).css('border-color','#ff0000');
-				}
-			 });
+			 $("#reserve-form .inpvalue").css('border-color','#D0D0D0');
+			if($("#name").val() == ''){err = true;$("#name").css('border-color','#ff0000');}
+			if($("#alias").val() == ''){err = true;$("#alias").css('border-color','#ff0000');}
 			if(err){event.preventDefault();msgerror('Пропущены обязательные поля');}
-			if($("#userfile").val() == ''){event.preventDefault();msgerror('Не указан файл');}
 		});
 		
 		$("#valid-alias").click(function(event){
@@ -99,8 +111,7 @@
 				msgerror('Поле не может быть пустым');
 				return false;
 			}
-			$.post("<?=$baseurl;?>admin/manager/unit/valid-alias",
-				{'alias':$("#alias").val(),'region':'<?=$this->uri->segment(2);?>'},
+			$.post("<?=$baseurl;?>admin/manager/class/valid-alias",{'alias':$("#alias").val()},
 					function(data){
 						if(data.status){
 							$("#alias").css('border-color','#00ff00');msgerror(data.message);
